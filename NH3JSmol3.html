@@ -11,24 +11,22 @@
     }
   </style>
 
-  <!-- JSmol -->
-  <script src="https://chemapps.stolaf.edu/jmol/jsmol/JSmol.min.js"></script>
+  <!-- JSmol : balise STRICTEMENT correcte -->
+  https://chemapps.stolaf.edu/jmol/jsmol/JSmol.min.js
 </head>
 
 <body>
 
 <h2>NH₃ – Représentation tridimensionnelle</h2>
-
 <p>Faites tourner la molécule pour observer la géométrie.</p>
 
 <script>
-  var Info = {
-    width: 400,
-    height: 400,
-    use: "HTML5",
-    j2sPath: "https://chemapps.stolaf.edu/jmol/jsmol/j2s",
-
-    script: `
+var Info = {
+  width: 400,
+  height: 400,
+  use: "HTML5",
+  j2sPath: "https://chemapps.stolaf.edu/jmol/jsmol/j2s",
+  script: `
 load inline "
 NH3
 JSmol 3D
@@ -50,9 +48,9 @@ color atoms;
 show hydrogens;
 set antialiasDisplay true;
 `
-  };
+};
 
-  document.write(Jmol.getAppletHtml("jsmolNH3", Info));
+document.write(Jmol.getAppletHtml("jsmolNH3", Info));
 </script>
 
 </body>
