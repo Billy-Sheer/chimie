@@ -1,71 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>HNO3 – Diagramme de Lewis</title>
+  <title>HNO₃ – Diagramme de Lewis</title>
 
-  <!-- ChemDoodle Web Components -->
   <link rel="stylesheet"
         href="https://unpkg.com/chemdoodle@9.5.0/build/chemdoodle.css">
+
   <script src="https://unpkg.com/chemdoodle@9.5.0/build/chemdoodle.js"></script>
 </head>
+
+<body>
 
 <h2>HNO₃ – Diagramme de Lewis (formatif)</h2>
 
 <canvas id="sketcherCanvas" width="600" height="400"
         style="border:1px solid #ccc;"></canvas>
 
-<button onclick="verifierHNO3()">Vérifier</button>
+<br><br>
+
+<button onclick="verifier()">Vérifier</button>
 <div id="feedback"></div>
 
 <script>
-  // Création du sketcher ChemDoodle
+  // Initialisation du sketcher
   var sketcher = new ChemDoodle.SketcherCanvas(
     'sketcherCanvas',
     600,
     400
   );
 
-  // Options utiles pour Lewis
-  sketcher.styles.atoms_displayTerminalCarbonLabels = true;
-  sketcher.styles.atoms_useJMOLColors = true;
-</script>
-
-<script>
-function verifierHNO3() {
-  var mol = sketcher.getMolecule(); // molécule dessinée
-  var atomes = mol.atoms;
-  var liaisons = mol.bonds;
-
-  // Trouver tous les hydrogènes
-  for (var i = 0; i < atomes.length; i++) {
-    var atome = atomes[i];
-
-    if (atome.label === "H") {
-      var lieAOxygene = false;
-
-      // Chercher les liaisons de cet hydrogène
-      for (var j = 0; j < liaisons.length; j++) {
-        var liaison = liaisons[j];
-
-        if (liaison.a1 === atome || liaison.a2 === atome) {
-          var autreAtome = (liaison.a1 === atome) ? liaison.a2 : liaison.a1;
-
-          if (autreAtome.label === "O") {
-            lieAOxygene = true;
-          }
-        }
-      }
-
-      // Si un H n’est pas lié à O → erreur
-      if (!lieAOxygene) {
-        document.getElementById("feedback").innerHTML =
-          "❌ HNO₃ est un oxoacide : l’hydrogène doit être lié à un oxygène.";
-        return;
-      }
-    }
+  function verifier() {
+    document.getElementById("feedback").innerHTML =
+      "✅ Le bouton fonctionne. Le sketcher est chargé.";
   }
-
-  // Si on arrive ici, la règle est respectée
-  document.getElementById("feedback").innerHTML =
-    "✅ Tous les hydrogènes sont correctement liés à des oxygènes.";
-}
 </script>
+
+</body>
+</html>
