@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>HNO₃ – Essai Ketcher</title>
+</head>
+
+<body>
+
+<h2>HNO₃ – Diagramme de Lewis (essai)</h2>
+
+<!-- Éditeur Ketcher -->
+<iframe id="ketcherFrame"
+        src="https://lifescience.opensource.epam.com/ketcher/"
+        width="700"
+        height="500"
+        style="border:1px solid #000;"></iframe>
+
+<br><br>
+
+<button onclick="verifier()">Vérifier</button>
+<div id="feedback"></div>
+
+<script>
+  function verifier() {
+    const frame = document.getElementById('ketcherFrame').contentWindow;
+
+    // Récupération du Molfile
+    frame.ketcher.getMolfile().then(molfile => {
+
+      // Tests conceptuels simples (démo)
+      const nbO = (molfile.match(/\sO\s/g) || []).length;
+      const nbN = (molfile.match(/\sN\s/g) || []).length;
+      const nbH = (molfile.match(/\sH\s/g) || []).length;
+
+      if (nbN !== 1 || nbO !== 3 || nbH !== 1) {
+        document.getElementById("feedback").innerText =
+          "❌ Vérifie la formule brute de HNO₃.";
+        return;
+      }
+
+      if (!molfile.includes(" O   H")) {
+        document.getElementById("feedback").innerText =
+          "❌ HNO₃ est un oxoacide : l’hydrogène doit être lié à un oxygène.";
+        return;
+      }
+
+      document.getElementById("feedback").innerText =
+        "✅ Structure plausible pour HNO₃.";
+    });
+  }
+</script>
+
+</body>
+</html>
