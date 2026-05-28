@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>NH₃ – Visualisation 3D (JSmol)</title>
+
+  <style>
+    body {
+      font-family: Calibri, "Segoe UI", Arial, sans-serif;
+      font-size: 16px;
+    }
+  </style>
+
+  <!-- Chargement CORRECT de JSmol -->
+  <script src="https://chemapps.stolaf.edu/jmol/jsmol/JSmol.min.js"></script>
+</head>
+
+<body>
+
+<h2>NH₃ – Représentation tridimensionnelle</h2>
+
+<p>Faites tourner la molécule pour observer la géométrie.</p>
+
+<script>
+  var Info = {
+    width: 400,
+    height: 400,
+    use: "HTML5",
+    j2sPath: "https://chemapps.stolaf.edu/jmol/jsmol/j2s",
+    script:
+      "load smiles \"N\";" +
+      "spacefill off;" +
+      "wireframe off;" +
+      "ballstick on;" +
+      "color atoms;" +
+      "show hydrogens;" +
+      "set antialiasDisplay true;"
+  };
+
+  document.write(Jmol.getAppletHtml("jsmolNH3", Info));
+</script>
+
+</body>
+</html>
