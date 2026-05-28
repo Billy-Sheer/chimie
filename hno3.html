@@ -4,16 +4,18 @@
   <meta charset="UTF-8">
   <title>HNO₃ – Diagramme de Lewis</title>
 
+  <!-- ChemDoodle Web Components (local) -->
   <link rel="stylesheet" href="ChemDoodleWeb.css">
+
   <script src="ChemDoodleWeb.js"></script>
   <script src="ChemDoodleWeb-uis.js"></script>
 </head>
+
 <body>
 
 <h2>HNO₃ – Diagramme de Lewis (formatif)</h2>
 
-<div id="toolbar"></div>
-
+<!-- Zone de dessin -->
 <canvas id="sketcherCanvas"
         width="600"
         height="400"
@@ -25,31 +27,3 @@
 <div id="feedback"></div>
 
 <script>
-  // Vérification que ChemDoodle est bien chargé
-  if (typeof ChemDoodle === "undefined") {
-    document.getElementById("feedback").innerHTML =
-      "❌ ChemDoodle n’est pas chargé.";
-  }
-
-  // Création du sketcher
-  var sketcher = new ChemDoodle.SketcherCanvas(
-    'sketcherCanvas',
-    600,
-    400
-  );
-
-  // Barre d’outils (INDISPENSABLE)
-  var toolbar = new ChemDoodle.SketcherToolbar(
-    'toolbar',
-    sketcher
-  );
-
-  function verifier() {
-    document.getElementById("feedback").innerHTML =
-      "✅ ChemDoodle est chargé et le sketcher fonctionne.";
-  }
-</script>
-
-</body>
-</html>
-``
