@@ -18,7 +18,7 @@
 
 <body>
 
-<h2>HNO₃ – Diagramme de Lewis (formatif 3)</h2>
+<h2>HNO₃ – Diagramme de Lewis (formatif 4)</h2>
 
 <p>
 Dessinez la <strong>structure de Lewis la plus plausible</strong> pour HNO₃.
@@ -64,7 +64,7 @@ function verifier() {
   const feedback = document.getElementById("feedback");
 
   // ============================
-  // 1) Vérification de la réponse conceptuelle
+  // 1) Vérification des doublets (raisonnement)
   // ============================
 
   const doublets = parseInt(
@@ -78,7 +78,6 @@ function verifier() {
     return;
   }
 
-  // Pour HNO₃ (structure la plus plausible) : 0 doublet sur N
   if (doublets !== 0) {
     feedback.innerText =
       "❌ Pour la structure la plus plausible de HNO₃, l’azote ne possède aucun doublet libre.";
@@ -86,38 +85,33 @@ function verifier() {
   }
 
   // ============================
-  // 2) Vérification de la structure dessinée
+  // 2) Vérification de la structure Ketcher
   // ============================
 
   const ketcher = document
-    .getElementById("ketcherFrame")
+    .getElementById('ketcherFrame')
     .contentWindow
     .ketcher;
 
   ketcher.getMolfile().then(mol => {
 
-    // Comptage des atomes (simple et robuste)
     const nbN = (mol.match(/\sN\s/g) || []).length;
     const nbO = (mol.match(/\sO\s/g) || []).length;
-    const nbH = (mol.match(/\sH\s/g) || []).length;
 
-    if (nbN !== 1 || nbO !== 3 || nbH !== 1) {
+    if (nbN !== 1 || nbO !== 3) {
       feedback.innerText =
-        "❌ Vérifie la formule brute de HNO₃ (1 N, 3 O, 1 H).";
+        "❌ Vérifie la présence de 1 atome d’azote et 3 atomes d’oxygène.";
       return;
     }
 
-    // Vérification oxoacide : présence d’un O–H
-    if (!mol.includes(" O   H")) {
+    // Test oxoacide : O–H (hydrogène implicite accepté)
+    if (!mol.includes(" O   H") && !mol.includes(" O  -H")) {
       feedback.innerText =
         "❌ HNO₃ est un oxoacide : l’hydrogène doit être lié à un oxygène.";
       return;
     }
 
-    // ============================
     // ✅ Tout est cohérent
-    // ============================
-
     feedback.innerText =
       "✅ Structure plausible et raisonnement correct pour HNO₃.";
   });
