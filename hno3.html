@@ -14,9 +14,11 @@
 
 <h2>HNO₃ – Diagramme de Lewis (formatif)</h2>
 
-<!-- IMPORTANT : le sketcher est un DIV -->
-<div id="sketcher"
-     style="width:600px; height:400px; border:1px solid #000;"></div>
+<!-- IMPORTANT : SketcherCanvas utilise un CANVAS -->
+<canvas id="sketcher"
+        width="600"
+        height="400"
+        style="border:1px solid #000;"></canvas>
 
 <br><br>
 
@@ -24,16 +26,16 @@
 <div id="feedback"></div>
 
 <script>
-  // ✅ API correcte, AUCUN SketcherCanvas
-  window.sketcher = new ChemDoodle.Sketcher(
+  // ✅ API CORRECTE
+  window.sketcher = new ChemDoodle.SketcherCanvas(
     'sketcher',
     600,
     400
   );
 
   function verifier() {
-    document.getElementById("feedback").innerHTML =
-      "✅ Le sketcher est actif.";
+    document.getElementById("feedback").innerText =
+      "✅ Sketcher actif. Prêt pour les règles chimiques.";
   }
 </script>
 
