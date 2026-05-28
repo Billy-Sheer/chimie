@@ -7,34 +7,83 @@
 
 <body>
 
-<h2>HNO₃ – Diagramme de Lewis (formatif)</h2>
+<h2>HNO₃ – Diagramme de Lewis (formatif2)</h2>
 
 <p>
 Dessinez la <strong>structure de Lewis la plus plausible</strong> pour HNO₃.
 </p>
 
+<!-- Éditeur Ketcher auto-hébergé -->
 <iframe
   id="ketcherFrame"
   src="ketcher/index.html"
   width="800"
   height="500"
-  style="border:1px solid #000;">
+  style="border:1px solid #999;">
 </iframe>
 
 <br><br>
 
+<p>
+Combien de <strong>doublets libres</strong> y a-t-il sur l’atome d’azote (N) ?
+</p>
+
+<input
+  type="number"
+  id="doubletsN"
+  min="0"
+  max="4"
+  style="width:60px;"
+>
+
+<br><br>
+
 <button onclick="verifier()">Vérifier</button>
-<div id="feedback" style="margin-top:10px; font-weight:bold;"></div>
+
+<div
+  id="feedback"
+  style="margin-top:15px; font-weight:bold;">
+</div>
 
 <script>
 function verifier() {
+
+  const feedback = document.getElementById("feedback");
+
+  // ============================
+  // 1) Vérification de la réponse conceptuelle
+  // ============================
+
+  const doublets = parseInt(
+    document.getElementById("doubletsN").value,
+    10
+  );
+
+  if (isNaN(doublets)) {
+    feedback.innerText =
+      "❌ Indique le nombre de doublets libres sur l’atome d’azote.";
+    return;
+  }
+
+  // Pour HNO₃ (structure la plus plausible) : 0 doublet sur N
+  if (doublets !== 0) {
+    feedback.innerText =
+      "❌ Pour la structure la plus plausible de HNO₃, l’azote ne possède aucun doublet libre.";
+    return;
+  }
+
+  // ============================
+  // 2) Vérification de la structure dessinée
+  // ============================
+
   const ketcher = document
-    .getElementById('ketcherFrame')
+    .getElementById("ketcherFrame")
     .contentWindow
     .ketcher;
 
   ketcher.getMolfile().then(mol => {
 
+    // Comptage des atomes (simple et robuste)
     const nbN = (mol.match(/\sN\s/g) || []).length;
     const nbO = (mol.match(/\sO\s/g) || []).length;
     const nbH = (mol.match(/\sH\s/g) || []).length;
@@ -45,18 +94,22 @@ function verifier() {
       return;
     }
 
+    // Vérification oxoacide : présence d’un O–H
     if (!mol.includes(" O   H")) {
       feedback.innerText =
         "❌ HNO₃ est un oxoacide : l’hydrogène doit être lié à un oxygène.";
       return;
     }
 
+    // ============================
+    // ✅ Tout est cohérent
+    // ============================
+
     feedback.innerText =
-      "✅ Structure plausible pour HNO₃.";
+      "✅ Structure plausible et raisonnement correct pour HNO₃.";
   });
 }
 </script>
 
 </body>
 </html>
-``
