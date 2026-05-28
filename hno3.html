@@ -1,0 +1,43 @@
+<button onclick="verifierHNO3()">Vérifier</button>
+<div id="feedback"></div>
+
+<script>
+function verifierHNO3() {
+  var mol = sketcher.getMolecule(); // molécule dessinée
+  var atomes = mol.atoms;
+  var liaisons = mol.bonds;
+
+  // Trouver tous les hydrogènes
+  for (var i = 0; i < atomes.length; i++) {
+    var atome = atomes[i];
+
+    if (atome.label === "H") {
+      var lieAOxygene = false;
+
+      // Chercher les liaisons de cet hydrogène
+      for (var j = 0; j < liaisons.length; j++) {
+        var liaison = liaisons[j];
+
+        if (liaison.a1 === atome || liaison.a2 === atome) {
+          var autreAtome = (liaison.a1 === atome) ? liaison.a2 : liaison.a1;
+
+          if (autreAtome.label === "O") {
+            lieAOxygene = true;
+          }
+        }
+      }
+
+      // Si un H n’est pas lié à O → erreur
+      if (!lieAOxygene) {
+        document.getElementById("feedback").innerHTML =
+          "❌ HNO₃ est un oxoacide : l’hydrogène doit être lié à un oxygène.";
+        return;
+      }
+    }
+  }
+
+  // Si on arrive ici, la règle est respectée
+  document.getElementById("feedback").innerHTML =
+    "✅ Tous les hydrogènes sont correctement liés à des oxygènes.";
+}
+</script>
