@@ -2,15 +2,12 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>HNO₃ – Diagramme de Lewis</title>
+  <title>Test ChemDoodle</title>
 
-  <!-- ChemDoodle Web Components (local) -->
   <link rel="stylesheet" href="ChemDoodleWeb.css">
-
   <script src="ChemDoodleWeb.js"></script>
   <script src="ChemDoodleWeb-uis.js"></script>
 </head>
-
 
 <body>
 
@@ -19,17 +16,17 @@
 <canvas id="sketcherCanvas"
         width="600"
         height="400"
-        style="border:1px solid #ccc;"></canvas>
+        style="border:1px solid #000;"></canvas>
 
 <script>
-  // Création explicite du sketcher
-  var sketcher = new ChemDoodle.SketcherCanvas(
+  // création explicite et globale du sketcher
+  window.sketcher = new ChemDoodle.SketcherCanvas(
     'sketcherCanvas',
     600,
     400
   );
 
-  console.log("sketcher =", sketcher);
+  console.log("Sketcher créé :", sketcher);
 </script>
 
 </body>
