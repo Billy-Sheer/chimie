@@ -1,5 +1,33 @@
+<head>
+  <meta charset="UTF-8">
+  <title>HNO3 – Diagramme de Lewis</title>
+
+  <!-- ChemDoodle Web Components -->
+  <link rel="stylesheet"
+        href="https://unpkg.com/chemdoodle@9.5.0/build/chemdoodle.css">
+  <script src="https://unpkg.com/chemdoodle@9.5.0/build/chemdoodle.js"></script>
+</head>
+
+<h2>HNO₃ – Diagramme de Lewis (formatif)</h2>
+
+<canvas id="sketcherCanvas" width="600" height="400"
+        style="border:1px solid #ccc;"></canvas>
+
 <button onclick="verifierHNO3()">Vérifier</button>
 <div id="feedback"></div>
+
+<script>
+  // Création du sketcher ChemDoodle
+  var sketcher = new ChemDoodle.SketcherCanvas(
+    'sketcherCanvas',
+    600,
+    400
+  );
+
+  // Options utiles pour Lewis
+  sketcher.styles.atoms_displayTerminalCarbonLabels = true;
+  sketcher.styles.atoms_useJMOLColors = true;
+</script>
 
 <script>
 function verifierHNO3() {
