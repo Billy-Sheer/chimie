@@ -14,15 +14,15 @@
 
 <body>
 
-<h2>Test ChemDoodle</h2>
+<h2>Test ChemDoodle – Sketcher</h2>
 
-<canvas id="sketcherCanvas" width="600" height="400"
+<canvas id="sketcherCanvas"
+        width="600"
+        height="400"
         style="border:1px solid #ccc;"></canvas>
 
 <script>
-  console.log("ChemDoodle =", typeof ChemDoodle);
-  console.log("SketcherCanvas =", typeof ChemDoodle.SketcherCanvas);
-
+  // Création explicite du sketcher
   var sketcher = new ChemDoodle.SketcherCanvas(
     'sketcherCanvas',
     600,
@@ -33,5 +33,4 @@
 </script>
 
 </body>
-
-<script>
+</html>
