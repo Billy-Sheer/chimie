@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>HNO₃ – Représentation tridimensionnelle</title>
 
+  <!-- Police -->
   <style>
     body {
       font-family: Calibri, "Segoe UI", Arial, sans-serif;
@@ -11,8 +12,8 @@
     }
   </style>
 
-  <!-- JSmol -->
-  <script src="https://chemapps.stolaf.edu/jmol/jsmol/JSmol.min.js"></script>
+  <!-- JSmol : balise correcte et fermée -->
+  <script src="https://chemappsmol/jsmol/JSmol.min.js</script>
 </head>
 
 <body>
@@ -21,7 +22,7 @@
 
 <p>Faites tourner la molécule pour observer la géométrie.</p>
 
-<div id="jsmolContainer"></div>
+<div id="jsmol"></div>
 
 <script>
   var Info = {
@@ -30,7 +31,7 @@
     use: "HTML5",
     j2sPath: "https://chemapps.stolaf.edu/jmol/jsmol/j2s",
     script:
-      "load smiles \"O=[N+]([O-])O\";" +
+      "load smiles \"O=[N+](O)[O-]\";" +
       "spacefill off;" +
       "wireframe off;" +
       "ballstick on;" +
@@ -40,7 +41,6 @@
   };
 
   Jmol.getApplet("jsmolApplet", Info);
-  Jmol.getAppletHtml("jsmolApplet", Info, document.getElementById("jsmolContainer"));
 </script>
 
 </body>
