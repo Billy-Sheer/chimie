@@ -1,4 +1,4 @@
-v<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
@@ -6,7 +6,6 @@ v<!DOCTYPE html>
 
   <!-- ChemDoodle Web Components (local) -->
   <link rel="stylesheet" href="ChemDoodleWeb.css">
-
   <script src="ChemDoodleWeb.js"></script>
   <script src="ChemDoodleWeb-uis.js"></script>
 </head>
@@ -15,39 +14,5 @@ v<!DOCTYPE html>
 
 <h2>HNO₃ – Diagramme de Lewis (formatif)</h2>
 
-<!-- Barre d’outils -->
-<div id="toolbar"></div>
-
-<!-- Zone de dessin -->
-<canvas id="sketcherCanvas"
-        width="600"
-        height="400"
-        style="border:1px solid #000;"></canvas>
-
-<br><br>
-
-<button onclick="verifier()">Vérifier</button>
-<div id="feedback"></div>
-
-<script>
-  // Création du sketcher
-  window.sketcher = new ChemDoodle.SketcherCanvas(
-    'sketcherCanvas',
-    600,
-    400
-  );
-
-  // Création EXPLICITE de la barre d’outils (indispensable)
-  var toolbar = new ChemDoodle.SketcherToolbar(
-    'toolbar',
-    sketcher
-  );
-
-  function verifier() {
-    document.getElementById("feedback").innerHTML =
-      "✅ Le sketcher fonctionne et le bouton aussi.";
-  }
-</script>
-
-</body>
-</html>
+<!-- Le sketcher est un DIV, pas un canvas -->
+<div id="sketcher"
