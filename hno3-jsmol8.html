@@ -12,18 +12,16 @@
     }
   </style>
 
-  <!-- JSmol : balise correcte et fermée -->
-  <script src="https://chemappsmol/jsmol/JSmol.min.js</script>
+  <!-- JSmol -->
+  <script src="https://chemapps.stolaf.edu/jmol/jsmol/JSmol.min.js"></script>
 </head>
 
 <body>
 
 <h2>HNO₃ – Représentation tridimensionnelle</h2>
-
 <p>Faites tourner la molécule pour observer la géométrie.</p>
 
-<div id="jsmol"></div>
-
+<div id="jsmol">
 <script>
   var Info = {
     width: 400,
@@ -40,8 +38,9 @@
       "set antialiasDisplay true;"
   };
 
-  Jmol.getApplet("jsmolApplet", Info);
+  document.write(Jmol.getAppletHtml("jsmolApplet", Info));
 </script>
+</div>
 
 </body>
 </html>
