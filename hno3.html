@@ -23,16 +23,26 @@
 <div id="feedback"></div>
 
 <script>
-  // Initialisation du sketcher
+  // Création du sketcher
   var sketcher = new ChemDoodle.SketcherCanvas(
     'sketcherCanvas',
     600,
     400
   );
 
+  // Afficher explicitement la barre d’outils
+  sketcher.toolbarShown = true;
+
+  // Style adapté aux Lewis
+  sketcher.styles.atoms_displayTerminalCarbonLabels = true;
+  sketcher.styles.atoms_useJMOLColors = true;
+
+  // Forcer l’affichage
+  sketcher.repaint();
+
   function verifier() {
     document.getElementById("feedback").innerHTML =
-      "✅ Le bouton fonctionne. Le sketcher est chargé.";
+      "✅ Le sketcher ChemDoodle est actif.";
   }
 </script>
 
