@@ -4,19 +4,17 @@
   <meta charset="UTF-8">
   <title>HNO₃ – Diagramme de Lewis</title>
 
-  <!-- Version 1000 SL -->
-  <!-- ChemDoodle Web Components (local) -->
+  <!-- ChemDoodle Web Components (local, sans UIS) -->
   <link rel="stylesheet" href="ChemDoodleWeb.css">
   <script src="ChemDoodleWeb.js"></script>
-  <script src="ChemDoodleWeb-uis.js"></script>
 </head>
 
 <body>
 
-<h2>HNO₃ – Diagramme de Lewis TEST (formatif)</h2>
+<h2>HNO₃ – Diagramme de Lewis 1000 (formatif)</h2>
 
 <canvas id="sketcher"
-        width="610"
+        width="600"
         height="400"
         style="border:1px solid #000;"></canvas>
 
@@ -26,7 +24,7 @@
 <div id="feedback"></div>
 
 <script>
-  // ✅ SEULE API VALIDE
+  // ✅ API STABLE ET DOCUMENTÉE
   window.sketcher = new ChemDoodle.SketcherCanvas(
     'sketcher',
     600,
@@ -35,7 +33,7 @@
 
   function verifier() {
     document.getElementById("feedback").innerText =
-      "✅ Sketcher actif. Astuce : clique dans le rectangle, puis tape C, O, N…";
+      "✅ Sketcher actif. Clique dans le rectangle puis tape C, O, N…";
   }
 </script>
 
