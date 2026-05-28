@@ -11,7 +11,7 @@
     }
   </style>
 
-  <!-- JSmol -->
+  <!-- ✅ CHARGEMENT CORRECT DE JSmol -->
   <script src="https://chemapps.stolaf.edu/jmol/jsmol/JSmol.min.js"></script>
 </head>
 
@@ -20,18 +20,12 @@
 <h2>HNO₃ – Représentation tridimensionnelle</h2>
 <p>Faites tourner la molécule pour observer la géométrie.</p>
 
-<div id="jsmol"></div>
-
 <script>
   var Info = {
     width: 400,
     height: 400,
     use: "HTML5",
-
-    // ✅ CHEMIN ABSOLU (clé du problème)
     j2sPath: "https://chemapps.stolaf.edu/jmol/jsmol/j2s",
-
-    // ✅ SMILES CORRECT DE HNO₃
     script:
       "load smiles \"O=[N+](O)[O-]\";" +
       "spacefill off;" +
@@ -42,9 +36,7 @@
       "set antialiasDisplay true;"
   };
 
-  // ✅ MÉTHODE OFFICIELLE
-  document.getElementById("jsmol").innerHTML =
-    Jmol.getAppletHtml("jsmolApplet", Info);
+  document.write(Jmol.getAppletHtml("jsmolApplet", Info));
 </script>
 
 </body>
