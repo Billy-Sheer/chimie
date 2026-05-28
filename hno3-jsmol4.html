@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <title>HNO₃ – Visualisation 3D (JSmol)</title>
 
-  <!-- JSmol : balise propre et testée -->
-  <script src="https://chemapps.stolafol/JSmol.min.js
+  <!-- Chargement correct de JSmol -->
+  <script src="https://chemapps.stolaf.edu/jmol/jsmol/JSmol.min.js"></script>
 </head>
 
 <body>
 
-<h2>HNO₃ – Représentation tridimensionnelle</h2>
+<h2>HNO₃ – Représentation tridimensionnelle V4</h2>
 
 <p>Faites tourner la molécule pour observer la géométrie.</p>
 
@@ -22,14 +22,7 @@
     height: 400,
     use: "HTML5",
     j2sPath: "https://chemapps.stolaf.edu/jmol/jsmol/j2s",
-    script:
-      "load smiles \"O=[N+](=O)[O-]\";" +
-      "spacefill off;" +
-      "wireframe off;" +
-      "ballstick on;" +
-      "color atoms;" +
-      "show hydrogens;" +
-      "set antialiasDisplay true;"
+    script: "load smiles \"O=[N+](=O)[O-]O\"; show hydrogens; ballstick; color atoms;"
   };
 
   Jmol.getApplet("jsmolApplet", Info);
