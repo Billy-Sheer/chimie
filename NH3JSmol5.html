@@ -11,48 +11,27 @@
     }
   </style>
 
-  <!-- ✅ CHARGEMENT CORRECT DE JSmol -->
+  <!-- JSmol : chargement canonique -->
   <script src="https://chemapps.stolaf.edu/jmol/jsmol/JSmol.min.js"></script>
 </head>
 
 <body>
 
-<h2>NH₃ – Représentation tridimensionnelle</h2>
+<h2>NH₃ – Géométrie pyramidale</h2>
 <p>Faites tourner la molécule pour observer la géométrie.</p>
 
 <script>
-  var Info = {
-    width: 400,
-    height: 400,
-    use: "HTML5",
-    j2sPath: "https://chemapps.stolaf.edu/jmol/jsmol/j2s",
-
-    script: `
+var Info = {
+  width: 400,
+  height: 400,
+  use: "HTML5",
+  j2sPath: "https://chemapps.stolaf.edu/jmol/jsmol/j2s",
+  script: `
 load inline "
-NH3
-JSmol 3D
+NH3 pyramidal
+JSmol canonical
 
  4 3  0  0  0  0  0  0  0  0  1 V2000
     0.0000    0.0000    0.2000 N
     0.9400    0.0000   -0.3000 H
    -0.4700    0.8140   -0.3000 H
-   -0.4700   -0.8140   -0.3000 H
-  1 2 1
-  1 3 1
-  1 4 1
-M  END
-";
-spacefill off;
-wireframe off;
-ballstick on;
-color atoms;
-show hydrogens;
-set antialiasDisplay true;
-`
-  };
-
-  document.write(Jmol.getAppletHtml("jsmolNH3", Info));
-</script>
-
-</body>
-</html>
