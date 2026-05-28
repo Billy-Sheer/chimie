@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>NH₃ – Visualisation 3D (JSmol)</title>
+  <title>NH₃ – Géométrie pyramidale (JSmol)</title>
 
   <style>
     body {
@@ -11,7 +11,7 @@
     }
   </style>
 
-  <!-- Chargement CORRECT de JSmol -->
+  <!-- JSmol -->
   <script src="https://chemapps.stolaf.edu/jmol/jsmol/JSmol.min.js"></script>
 </head>
 
@@ -27,14 +27,29 @@
     height: 400,
     use: "HTML5",
     j2sPath: "https://chemapps.stolaf.edu/jmol/jsmol/j2s",
-    script:
-      "load smiles \"N\";" +
-      "spacefill off;" +
-      "wireframe off;" +
-      "ballstick on;" +
-      "color atoms;" +
-      "show hydrogens;" +
-      "set antialiasDisplay true;"
+
+    script: `
+load inline "
+NH3
+JSmol 3D
+
+ 4 3  0  0  0  0  0  0  0  0  1 V2000
+    0.0000    0.0000    0.2000 N
+    0.9400    0.0000   -0.3000 H
+   -0.4700    0.8140   -0.3000 H
+   -0.4700   -0.8140   -0.3000 H
+  1 2 1
+  1 3 1
+  1 4 1
+M  END
+";
+spacefill off;
+wireframe off;
+ballstick on;
+color atoms;
+show hydrogens;
+set antialiasDisplay true;
+`
   };
 
   document.write(Jmol.getAppletHtml("jsmolNH3", Info));
