@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>HNO₃ – Diagramme de Lewis</title>
 
+  <!-- ChemDoodle Web Components -->
   <link rel="stylesheet"
         href="https://unpkg.com/chemdoodle@9.5.0/build/chemdoodle.css">
 
@@ -14,6 +15,10 @@
 
 <h2>HNO₃ – Diagramme de Lewis (formatif)</h2>
 
+<!-- Barre d’outils -->
+<div id="toolbar"></div>
+
+<!-- Zone de dessin -->
 <canvas id="sketcherCanvas" width="600" height="400"
         style="border:1px solid #ccc;"></canvas>
 
@@ -30,19 +35,15 @@
     400
   );
 
-  // Afficher explicitement la barre d’outils
-  sketcher.toolbarShown = true;
-
-  // Style adapté aux Lewis
-  sketcher.styles.atoms_displayTerminalCarbonLabels = true;
-  sketcher.styles.atoms_useJMOLColors = true;
-
-  // Forcer l’affichage
-  sketcher.repaint();
+  // Création de la barre d’outils (INDISPENSABLE)
+  var toolbar = new ChemDoodle.SketcherToolbar(
+    'toolbar',
+    sketcher
+  );
 
   function verifier() {
     document.getElementById("feedback").innerHTML =
-      "✅ Le sketcher ChemDoodle est actif.";
+      "✅ Le sketcher ChemDoodle fonctionne.";
   }
 </script>
 
