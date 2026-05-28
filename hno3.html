@@ -1,32 +1,52 @@
-<!DOCTYPE html>
+v<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Test ChemDoodle</title>
+  <title>HNO₃ – Diagramme de Lewis</title>
 
+  <!-- ChemDoodle Web Components (local) -->
   <link rel="stylesheet" href="ChemDoodleWeb.css">
+
   <script src="ChemDoodleWeb.js"></script>
   <script src="ChemDoodleWeb-uis.js"></script>
 </head>
 
 <body>
 
-<h2>Test ChemDoodle – Sketcher</h2>
+<h2>HNO₃ – Diagramme de Lewis (formatif)</h2>
 
+<!-- Barre d’outils -->
+<div id="toolbar"></div>
+
+<!-- Zone de dessin -->
 <canvas id="sketcherCanvas"
         width="600"
         height="400"
         style="border:1px solid #000;"></canvas>
 
+<br><br>
+
+<button onclick="verifier()">Vérifier</button>
+<div id="feedback"></div>
+
 <script>
-  // création explicite et globale du sketcher
+  // Création du sketcher
   window.sketcher = new ChemDoodle.SketcherCanvas(
     'sketcherCanvas',
     600,
     400
   );
 
-  console.log("Sketcher créé :", sketcher);
+  // Création EXPLICITE de la barre d’outils (indispensable)
+  var toolbar = new ChemDoodle.SketcherToolbar(
+    'toolbar',
+    sketcher
+  );
+
+  function verifier() {
+    document.getElementById("feedback").innerHTML =
+      "✅ Le sketcher fonctionne et le bouton aussi.";
+  }
 </script>
 
 </body>
