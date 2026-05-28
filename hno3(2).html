@@ -2,54 +2,44 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>HNO₃ – Essai Ketcher</title>
+  <title>HNO₃ – Exercice formatif</title>
 </head>
 
 <body>
 
-<h2>HNO₃ – Diagramme de Lewis (essai)</h2>
+<h2>HNO₃ – Diagramme de Lewis (formatif)</h2>
 
-<!-- Éditeur Ketcher -->
-<iframe id="ketcherFrame"
-        src="https://lifescience.opensource.epam.com/ketcher/"
-        width="700"
-        height="500"
-        style="border:1px solid #000;"></iframe>
+<p>
+Dessinez la <strong>structure de Lewis la plus plausible</strong> pour HNO₃.
+</p>
+
+<!-- Ketcher standalone hébergé localement -->
+<iframe
+  id="ketcherFrame"
+  src="ketcher/index.html"
+  width="800"
+  height="500"
+  style="border:1px solid #000;">
+</iframe>
 
 <br><br>
 
 <button onclick="verifier()">Vérifier</button>
-<div id="feedback"></div>
+<div id="feedback" style="margin-top:10px; font-weight:bold;"></div>
 
 <script>
-  function verifier() {
-    const frame = document.getElementById('ketcherFrame').contentWindow;
+function verifier() {
+  const ketcher = document
+    .getElementById('ketcherFrame')
+    .contentWindow
+    .ketcher;
 
-    // Récupération du Molfile
-    frame.ketcher.getMolfile().then(molfile => {
+  // Récupération du Molfile
+  ketcher.getMolfile().then(mol => {
 
-      // Tests conceptuels simples (démo)
-      const nbO = (molfile.match(/\sO\s/g) || []).length;
-      const nbN = (molfile.match(/\sN\s/g) || []).length;
-      const nbH = (molfile.match(/\sH\s/g) || []).length;
+    // Comptage simple des atomes
+    const nbN = (mol.match(/\sN\s/g) || []).length;
+    const nbO = (mol.match(/\sO\s/g) || []).length;
+    const nbH = (mol.match(/\sH\s/g) || []).length;
 
-      if (nbN !== 1 || nbO !== 3 || nbH !== 1) {
-        document.getElementById("feedback").innerText =
-          "❌ Vérifie la formule brute de HNO₃.";
-        return;
-      }
-
-      if (!molfile.includes(" O   H")) {
-        document.getElementById("feedback").innerText =
-          "❌ HNO₃ est un oxoacide : l’hydrogène doit être lié à un oxygène.";
-        return;
-      }
-
-      document.getElementById("feedback").innerText =
-        "✅ Structure plausible pour HNO₃.";
-    });
-  }
-</script>
-
-</body>
-</html>
+    if (nbN !== 1 || nbO !== 3 || nbH !== 1) {
