@@ -11,19 +11,27 @@
   <script src="ChemDoodleWeb-uis.js"></script>
 </head>
 
+
 <body>
 
-<h2>HNO₃ – Diagramme de Lewis (formatif)</h2>
+<h2>Test ChemDoodle</h2>
 
-<!-- Zone de dessin -->
-<canvas id="sketcherCanvas"
-        width="600"
-        height="400"
+<canvas id="sketcherCanvas" width="600" height="400"
         style="border:1px solid #ccc;"></canvas>
 
-<br><br>
+<script>
+  console.log("ChemDoodle =", typeof ChemDoodle);
+  console.log("SketcherCanvas =", typeof ChemDoodle.SketcherCanvas);
 
-<button onclick="verifier()">Vérifier</button>
-<div id="feedback"></div>
+  var sketcher = new ChemDoodle.SketcherCanvas(
+    'sketcherCanvas',
+    600,
+    400
+  );
+
+  console.log("sketcher =", sketcher);
+</script>
+
+</body>
 
 <script>
