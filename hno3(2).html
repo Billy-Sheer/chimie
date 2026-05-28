@@ -13,7 +13,6 @@
 Dessinez la <strong>structure de Lewis la plus plausible</strong> pour HNO₃.
 </p>
 
-<!-- Ketcher standalone hébergé localement -->
 <iframe
   id="ketcherFrame"
   src="ketcher/index.html"
@@ -34,12 +33,30 @@ function verifier() {
     .contentWindow
     .ketcher;
 
-  // Récupération du Molfile
   ketcher.getMolfile().then(mol => {
 
-    // Comptage simple des atomes
     const nbN = (mol.match(/\sN\s/g) || []).length;
     const nbO = (mol.match(/\sO\s/g) || []).length;
     const nbH = (mol.match(/\sH\s/g) || []).length;
 
     if (nbN !== 1 || nbO !== 3 || nbH !== 1) {
+      feedback.innerText =
+        "❌ Vérifie la formule brute de HNO₃ (1 N, 3 O, 1 H).";
+      return;
+    }
+
+    if (!mol.includes(" O   H")) {
+      feedback.innerText =
+        "❌ HNO₃ est un oxoacide : l’hydrogène doit être lié à un oxygène.";
+      return;
+    }
+
+    feedback.innerText =
+      "✅ Structure plausible pour HNO₃.";
+  });
+}
+</script>
+
+</body>
+</html>
+``
