@@ -23,7 +23,7 @@
     }
   </style>
 
-  <!-- Ketcher (CDN officiel) -->
+  <!-- Ketcher Standalone -->
   <script src="https://unpkg.com/ketcher-standalone@2.8.0/dist/ketcher.min.js"></script>
 </head>
 
@@ -31,7 +31,7 @@
 
 <h2 id="titre"></h2>
 
-<div id="ketcher" style="width: 600px; height: 400px;"></div>
+<div id="ketcher" style="width:600px; height:400px;"></div>
 
 <button onclick="valider()">Valider la structure</button>
 
@@ -60,15 +60,15 @@ const regles = {
 };
 
 /* ===============================
-   3. INITIALISATION KETCHER
+   3. INITIALISATION KETCHER ✅
    =============================== */
 
 let ketcher;
 
 window.addEventListener("load", async () => {
-  ketcher = new window.KetcherStandalone({
-    element: document.getElementById("ketcher")
-  });
+  ketcher = await window.KetcherStandalone.create(
+    document.getElementById("ketcher")
+  );
 });
 
 /* ===============================
@@ -90,22 +90,20 @@ async function valider() {
   try {
     verifierAtomes(mol, cible.atomes);
     verifierAtomeCentral(mol, cible.central);
-
     feedback.innerText = "✅ Structure correcte";
-  } catch (message) {
-    feedback.innerText = message;
+  } catch (err) {
+    feedback.innerText = err;
   }
 }
 
 /* ===============================
-   5. FONCTIONS GÉNÉRIQUES
+   5. VALIDATEURS
    =============================== */
 
 function verifierAtomes(mol, atomesAttendus) {
   for (let symbole in atomesAttendus) {
     const regex = new RegExp("\\s" + symbole + "\\s", "g");
     const nb = (mol.match(regex) || []).length;
-
     if (nb !== atomesAttendus[symbole]) {
       throw "❌ Nombre incorrect d’atomes " + symbole;
     }
@@ -114,47 +112,37 @@ function verifierAtomes(mol, atomesAttendus) {
 
 function verifierAtomeCentral(mol, symboleCentral) {
   const lignes = mol.split("\n");
-
   const types = {};
   const connexions = {};
-
   let index = 1;
-  let lectureAtomes = true;
 
   for (let ligne of lignes) {
     const p = ligne.trim().split(/\s+/);
 
-    // Ligne atome (contient symbole)
-    if (lectureAtomes && p.length >= 4 && isNaN(p[0])) {
+    if (p.length >= 4 && isNaN(p[0])) {
       types[index] = p[3];
       index++;
     }
 
-    // Ligne liaison
     if (p.length >= 3 && !isNaN(p[0]) && !isNaN(p[1])) {
-      const a1 = p[0];
-      const a2 = p[1];
-
-      connexions[a1] = (connexions[a1] || 0) + 1;
-      connexions[a2] = (connexions[a2] || 0) + 1;
+      connexions[p[0]] = (connexions[p[0]] || 0) + 1;
+      connexions[p[1]] = (connexions[p[1]] || 0) + 1;
     }
   }
 
   let max = 0;
-  let centralIndex = null;
-
+  let centre = null;
   for (let i in connexions) {
     if (connexions[i] > max) {
       max = connexions[i];
-      centralIndex = i;
+      centre = i;
     }
   }
 
-  if (types[centralIndex] !== symboleCentral) {
+  if (types[centre] !== symboleCentral) {
     throw "❌ L’atome central est incorrect.";
   }
 }
 </script>
 
 </body>
-</html>
