@@ -4,18 +4,15 @@
   <meta charset="UTF-8">
   <title>Dessin de Lewis – Générique</title>
 
-  <!-- Police -->
   <style>
     body {
       font-family: Calibri, "Segoe UI", Arial, sans-serif;
       font-size: 16px;
     }
-
     #feedback {
       margin-top: 10px;
       font-weight: bold;
     }
-
     button {
       margin-top: 10px;
       padding: 6px 12px;
@@ -23,7 +20,7 @@
     }
   </style>
 
-  <!-- Ketcher Standalone -->
+  <!-- ✅ BON SCRIPT -->
   <script src="https://unpkg.com/ketcher-standalone@2.8.0/dist/ketcher.min.js"></script>
 </head>
 
@@ -39,9 +36,8 @@
 
 <script>
 /* ===============================
-   1. PARAMÈTRE DE MOLÉCULE
+   PARAMÈTRE MOLÉCULE
    =============================== */
-
 const params = new URLSearchParams(window.location.search);
 const molecule = params.get("mol") || "HNO3";
 
@@ -49,42 +45,34 @@ document.getElementById("titre").innerText =
   "Dessinez la structure de Lewis de " + molecule;
 
 /* ===============================
-   2. RÈGLES PAR MOLÉCULE
+   RÈGLES
    =============================== */
-
 const regles = {
   HNO3: {
-    atomes: { H: 1, N: 1, O: 3 },
+    atomes: { H:1, N:1, O:3 },
     central: "N"
   }
 };
 
 /* ===============================
-   3. INITIALISATION KETCHER ✅
+   KETCHER ✅
    =============================== */
-
 let ketcher;
 
 window.addEventListener("load", async () => {
-  ketcher = await window.KetcherStandalone.create(
+  ketcher = await window.ketcher.create(
     document.getElementById("ketcher")
   );
 });
 
 /* ===============================
-   4. VALIDATION
+   VALIDATION
    =============================== */
-
 async function valider() {
   const feedback = document.getElementById("feedback");
   feedback.innerText = "";
 
   const cible = regles[molecule];
-  if (!cible) {
-    feedback.innerText = "Molécule non définie.";
-    return;
-  }
-
   const mol = await ketcher.getMolfile();
 
   try {
@@ -97,15 +85,13 @@ async function valider() {
 }
 
 /* ===============================
-   5. VALIDATEURS
+   FONCTIONS
    =============================== */
-
-function verifierAtomes(mol, atomesAttendus) {
-  for (let symbole in atomesAttendus) {
-    const regex = new RegExp("\\s" + symbole + "\\s", "g");
-    const nb = (mol.match(regex) || []).length;
-    if (nb !== atomesAttendus[symbole]) {
-      throw "❌ Nombre incorrect d’atomes " + symbole;
+function verifierAtomes(mol, atomes) {
+  for (let el in atomes) {
+    const nb = (mol.match(new RegExp("\\s" + el + "\\s", "g")) || []).length;
+    if (nb !== atomes[el]) {
+      throw "❌ Nombre incorrect d’atomes " + el;
     }
   }
 }
@@ -116,28 +102,19 @@ function verifierAtomeCentral(mol, symboleCentral) {
   const connexions = {};
   let index = 1;
 
-  for (let ligne of lignes) {
-    const p = ligne.trim().split(/\s+/);
-
+  for (let l of lignes) {
+    const p = l.trim().split(/\s+/);
     if (p.length >= 4 && isNaN(p[0])) {
-      types[index] = p[3];
-      index++;
+      types[index++] = p[3];
     }
-
     if (p.length >= 3 && !isNaN(p[0]) && !isNaN(p[1])) {
       connexions[p[0]] = (connexions[p[0]] || 0) + 1;
       connexions[p[1]] = (connexions[p[1]] || 0) + 1;
     }
   }
 
-  let max = 0;
-  let centre = null;
-  for (let i in connexions) {
-    if (connexions[i] > max) {
-      max = connexions[i];
-      centre = i;
-    }
-  }
+  let centre = Object.keys(connexions)
+    .reduce((a,b)=> connexions[a]>connexions[b]?a:b);
 
   if (types[centre] !== symboleCentral) {
     throw "❌ L’atome central est incorrect.";
