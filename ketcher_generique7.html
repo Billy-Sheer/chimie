@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Diagramme de Lewis – Exercice formatif</title>
+
+  <style>
+    body {
+      font-family: Calibri, "Segoe UI", Arial, sans-serif;
+      font-size: 16px;
+    }
+
+    input, button {
+      font-family: Calibri, "Segoe UI", Arial, sans-serif;
+      font-size: 16px;
+    }
+  </style>
+</head>
+
+<body>
+
+<h2 id="titre"></h2>
+
+<p id="consigne"></p>
+
+<!-- ✅ KETCHER : STRICTEMENT IDENTIQUE -->
+<div id="ketcher-container">
+  <iframe
+    id="ketcherFrame"
+    src="ketcher/index.html"
+    width="600"
+    height="400"
+    style="border:1px solid #000;"
+  ></iframe>
+</div>
+
+<br><br>
+
+<p id="question-doublets"></p>
+
+<input
+  type="number"
+  id="doubletsCentral"
+  min="0"
+  max="6"
+  style="width:60px;"
+>
+
+<br><br>
+
+<button onclick="verifier()">Vérifier</button>
+
+<div
+  id="feedback"
+  style="margin-top:15px; font-weight:bold;">
+</div>
+
+<script>
+/* =====================================================
+   1. PARAMÈTRE MOLÉCULE
+   ===================================================== */
+const params = new URLSearchParams(window.location.search);
+const molecule = params.get("mol") || "HNO3";
+
+/* =====================================================
+   2. RÈGLES PAR MOLÉCULE
+   ===================================================== */
+const regles = {
+  HNO3: {
+    nom: "HNO₃",
+    atomes: { H:1, N:1, O:3 },
+    central: "N",
+    doubletsCentral: 0,
+    oxoacide: true,
+    consigne:
+      "Dessinez la structure de Lewis la plus plausible pour HNO₃.",
+    question:
+      "Combien de doublets libres y a-t-il sur l’atome d’azote (N) ?"
+  },
+
+  NH3: {
+    nom: "NH₃",
+    atomes: { N:1, H:3 },
+    central: "N",
+    doubletsCentral: 1,
+    oxoacide: false,
+    consigne:
+      "Dessinez la structure de Lewis la plus plausible pour NH₃.",
+    question:
+      "Combien de doublets libres y a-t-il sur l’atome d’azote (N) ?"
+  }
+};
+
+/* =====================================================
+   3. INITIALISATION DU TEXTE
+   ===================================================== */
+const cible = regles[molecule];
+
+document.getElementById("titre").innerText =
+  cible.nom + " – Diagramme de Lewis (formatif)";
+
+document.getElementById("consigne").innerText =
+  cible.consigne;
+
+document.getElementById("question-doublets").innerText =
+  cible.question;
+
+/* =====================================================
+   4. VÉRIFICATION
+   ===================================================== */
+function verifier() {
+
+  const feedback = document.getElementById("feedback");
+
+  /* ---- Doublets ---- */
+  const doublets = parseInt(
+    document.getElementById("doubletsCentral").value,
+    10
+  );
+
+  if (isNaN(doublets)) {
+    feedback.innerText =
+      "❌ Indique le nombre de doublets libres sur l’atome central.";
+    return;
+  }
+
+  if (doublets !== cible.doubletsCentral) {
+    feedback.innerText =
+      "❌ Nombre de doublets incorrect pour la structure la plus plausible.";
+    return;
+  }
+
+  /* ---- Ketcher ---- */
+  const ketcher = document
+    .getElementById("ketcherFrame")
+    .contentWindow
+    .ketcher;
+
+  ketcher.getMolfile().then(mol => {
+
+    // Atomes
+    for (let el in cible.atomes) {
+      const nb = (mol.match(
+        new RegExp("\\s" + el + "\\s", "g")
+      ) || []).length;
+
+      if (nb !== cible.atomes[el]) {
+        feedback.innerText =
+          "❌ Vérifie le nombre d’atomes (" + el + ").";
+        return;
+      }
+    }
+
+    // Oxoacide (OH requis)
+    if (cible.oxoacide) {
+      ketcher.getSmiles().then(smiles => {
+        if (!smiles.includes("O") || !smiles.includes("H")) {
+          feedback.innerText =
+            "❌ Cette molécule est un oxoacide : l’hydrogène doit être lié à un oxygène.";
+          return;
+        }
+
+        feedback.innerText =
+          "✅ Structure plausible et raisonnement correct.";
+      });
+    } else {
+      feedback.innerText =
+        "✅ Structure plausible et raisonnement correct.";
+    }
+  });
+}
+</script>
+
+</body>
+</html>
