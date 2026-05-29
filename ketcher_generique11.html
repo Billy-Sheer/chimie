@@ -118,8 +118,20 @@ function verifier() {
     }
 
     /* ===== 1) ATOMES PRÉSENTS ===== */
-    const atomesPresents = (mol.match(/\s[A-Z][a-z]?\s/g) || [])
-      .map(x => x.trim());
+  // Lecture correcte des atomes depuis le Molfile
+const lignes = mol.split("\n");
+
+// Ligne des comptes
+const counts = lignes[3].trim().split(/\s+/);
+const nbAtomes = parseInt(counts[0], 10);
+
+// Lignes des atomes uniquement
+const atomesPresents = [];
+for (let i = 0; i < nbAtomes; i++) {
+  const ligneAtome = lignes[4 + i].trim().split(/\s+/);
+  const symbole = ligneAtome[3]; // colonne du symbole
+  atomesPresents.push(symbole);
+}
 
     const atomesAutorises = Object.keys(cible.atomes);
 
