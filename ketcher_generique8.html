@@ -23,7 +23,7 @@
 
 <p id="consigne"></p>
 
-<!-- ✅ KETCHER : STRICTEMENT IDENTIQUE -->
+<!-- ✅ KETCHER AUTO-HÉBERGÉ (INCHANGÉ) -->
 <div id="ketcher-container">
   <iframe
     id="ketcherFrame"
@@ -106,13 +106,15 @@ document.getElementById("question-doublets").innerText =
   cible.question;
 
 /* =====================================================
-   4. VÉRIFICATION
+   4. FONCTION PRINCIPALE
    ===================================================== */
 function verifier() {
 
   const feedback = document.getElementById("feedback");
 
-  /* ---- Doublets ---- */
+  // ----------------------------
+  // A) Raisonnement : doublets
+  // ----------------------------
   const doublets = parseInt(
     document.getElementById("doubletsCentral").value,
     10
@@ -126,50 +128,3 @@ function verifier() {
 
   if (doublets !== cible.doubletsCentral) {
     feedback.innerText =
-      "❌ Nombre de doublets incorrect pour la structure la plus plausible.";
-    return;
-  }
-
-  /* ---- Ketcher ---- */
-  const ketcher = document
-    .getElementById("ketcherFrame")
-    .contentWindow
-    .ketcher;
-
-  ketcher.getMolfile().then(mol => {
-
-    // Atomes
-    for (let el in cible.atomes) {
-      const nb = (mol.match(
-        new RegExp("\\s" + el + "\\s", "g")
-      ) || []).length;
-
-      if (nb !== cible.atomes[el]) {
-        feedback.innerText =
-          "❌ Vérifie le nombre d’atomes (" + el + ").";
-        return;
-      }
-    }
-
-    // Oxoacide (OH requis)
-    if (cible.oxoacide) {
-      ketcher.getSmiles().then(smiles => {
-        if (!smiles.includes("O") || !smiles.includes("H")) {
-          feedback.innerText =
-            "❌ Cette molécule est un oxoacide : l’hydrogène doit être lié à un oxygène.";
-          return;
-        }
-
-        feedback.innerText =
-          "✅ Structure plausible et raisonnement correct.";
-      });
-    } else {
-      feedback.innerText =
-        "✅ Structure plausible et raisonnement correct.";
-    }
-  });
-}
-</script>
-
-</body>
-</html>
