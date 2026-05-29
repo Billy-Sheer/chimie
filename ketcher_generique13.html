@@ -9,7 +9,6 @@
       font-family: Calibri, "Segoe UI", Arial, sans-serif;
       font-size: 16px;
     }
-
     input, button {
       font-family: inherit;
       font-size: 16px;
@@ -36,11 +35,9 @@
 <br><br>
 
 <p id="question-doublets"></p>
-
 <input type="number" id="doubletsCentral" min="0" max="6" style="width:60px;">
 
 <br><br>
-
 <button onclick="verifier()">Vérifier</button>
 
 <div id="feedback" style="margin-top:15px; font-weight:bold;"></div>
@@ -50,7 +47,7 @@
    PARAMÈTRE MOLÉCULE
    =============================== */
 const params = new URLSearchParams(window.location.search);
-const molecule = params.get("mol") || "NH3";
+const molecule = params.get("mol") || "HNO3";
 
 /* ===============================
    RÈGLES
@@ -60,7 +57,6 @@ const regles = {
     nom: "NH₃",
     atomes: { N:1, H:3 },
     doubletsCentral: 1,
-    oxoacide: false,
     consigne: "Dessinez la structure de Lewis la plus plausible pour NH₃.",
     question: "Combien de doublets libres y a‑t‑il sur l’atome d’azote (N) ?"
   },
@@ -68,7 +64,6 @@ const regles = {
     nom: "HNO₃",
     atomes: { H:1, N:1, O:3 },
     doubletsCentral: 0,
-    oxoacide: true,
     consigne: "Dessinez la structure de Lewis la plus plausible pour HNO₃.",
     question: "Combien de doublets libres y a‑t‑il sur l’atome d’azote (N) ?"
   }
@@ -84,7 +79,6 @@ document.getElementById("question-doublets").innerText = cible.question;
    FONCTION PRINCIPALE
    =============================== */
 function verifier() {
-
   const feedback = document.getElementById("feedback");
 
   const doublets = parseInt(
@@ -103,35 +97,28 @@ function verifier() {
     return;
   }
 
-  const ketcher = document
-    .getElementById("ketcherFrame")
-    .contentWindow.ketcher;
+  const ketcher =
+    document.getElementById("ketcherFrame").contentWindow.ketcher;
 
   ketcher.getMolfile().then(mol => {
 
-    /* ===== 0) PLUSIEURS MOLÉCULES ===== */
-    const nb = compterMolecules(mol);
-    if (nb > 1) {
+    /* --- 1) Plusieurs molécules --- */
+    if (compterMolecules(mol) > 1) {
       feedback.innerText =
         "❌ Le dessin contient plusieurs molécules non reliées.";
       return;
     }
 
-    /* ===== 1) ATOMES PRÉSENTS ===== */
-  // Lecture correcte des atomes depuis le Molfile
-const lignes = mol.split("\n");
+    /* --- 2) Lecture des atomes --- */
+    const lignes = mol.split("\n");
+    const counts = lignes[3].trim().split(/\s+/);
+    const nbAtomes = parseInt(counts[0], 10);
 
-// Ligne des comptes
-const counts = lignes[3].trim().split(/\s+/);
-const nbAtomes = parseInt(counts[0], 10);
-
-// Lignes des atomes uniquement
-const atomesPresents = [];
-for (let i = 0; i < nbAtomes; i++) {
-  const ligneAtome = lignes[4 + i].trim().split(/\s+/);
-  const symbole = ligneAtome[3]; // colonne du symbole
-  atomesPresents.push(symbole);
-}
+    const atomesPresents = [];
+    for (let i = 0; i < nbAtomes; i++) {
+      const p = lignes[4 + i].trim().split(/\s+/);
+      atomesPresents.push(p[3]);
+    }
 
     const atomesAutorises = Object.keys(cible.atomes);
 
@@ -146,26 +133,35 @@ for (let i = 0; i < nbAtomes; i++) {
       return;
     }
 
+    /* --- 3) Quantités d’atomes (H explicites) --- */
     for (let el of atomesAutorises) {
-  const nbEl = atomesPresents.filter(x => x === el).length;
-  const nbAttendu = cible.atomes[el];
+      const nb = atomesPresents.filter(x => x === el).length;
+      const attendu = cible.atomes[el];
 
-  // 🔹 Cas particulier : hydrogènes implicites
-  if (el === "H" && nbEl < nbAttendu) {
-    feedback.innerText =
-      "❌ Les hydrogènes doivent être dessinés explicitement.\n" +
-      "Assure‑toi de tracer les liaisons avec H (ex. N–H).";
-    return;
-  }
+      if (el === "H" && nb < attendu) {
+        feedback.innerText =
+          "❌ Les hydrogènes doivent être dessinés explicitement " +
+          "(liaisons avec H visibles).";
+        return;
+      }
 
-  // 🔹 Cas général
-  if (nbEl !== nbAttendu) {
-    feedback.innerText =
-      "❌ Nombre incorrect d’atomes " + el +
-      " (attendu : " + nbAttendu + ").";
-    return;
-  }
-}
+      if (nb !== attendu) {
+        feedback.innerText =
+          "❌ Nombre incorrect d’atomes " + el +
+          " (attendu : " + attendu + ").";
+        return;
+      }
+    }
+
+    /* --- 4) Trappe spécifique HNO3 : exactement un OH --- */
+    if (molecule === "HNO3") {
+      const nbOH = compterGroupesOH(mol);
+      if (nbOH !== 1) {
+        feedback.innerText =
+          "❌ HNO₃ doit contenir un seul groupe OH.";
+        return;
+      }
+    }
 
     feedback.innerText =
       "✅ Structure plausible et raisonnement correct.";
@@ -173,50 +169,72 @@ for (let i = 0; i < nbAtomes; i++) {
 }
 
 /* ===============================
-   DÉTECTION DE PLUSIEURS MOLÉCULES (CORRIGÉE ✅)
+   OUTILS
    =============================== */
 function compterMolecules(mol) {
   const lignes = mol.split("\n");
-
-  // Ligne des comptes (ligne 4 du Molfile)
   const counts = lignes[3].trim().split(/\s+/);
   const nbAtomes = parseInt(counts[0], 10);
   const nbLiaisons = parseInt(counts[1], 10);
 
-  const liaisons = {};
-  for (let i = 1; i <= nbAtomes; i++) {
-    liaisons[i] = [];
-  }
+  const voisins = {};
+  for (let i = 1; i <= nbAtomes; i++) voisins[i] = [];
 
-  // Lignes des liaisons
-  const debutLiaisons = 4 + nbAtomes;
+  const debut = 4 + nbAtomes;
   for (let i = 0; i < nbLiaisons; i++) {
-    const p = lignes[debutLiaisons + i].trim().split(/\s+/);
+    const p = lignes[debut + i].trim().split(/\s+/);
     const a = parseInt(p[0], 10);
     const b = parseInt(p[1], 10);
-    liaisons[a].push(b);
-    liaisons[b].push(a);
+    voisins[a].push(b);
+    voisins[b].push(a);
   }
 
-  const visites = new Set();
-  let composants = 0;
+  const vus = new Set();
+  let composantes = 0;
 
   for (let i = 1; i <= nbAtomes; i++) {
-    if (!visites.has(i)) {
-      composants++;
+    if (!vus.has(i)) {
+      composantes++;
       const pile = [i];
       while (pile.length) {
         const x = pile.pop();
-        if (visites.has(x)) continue;
-        visites.add(x);
-        for (let v of liaisons[x]) {
-          if (!visites.has(v)) pile.push(v);
-        }
+        if (vus.has(x)) continue;
+        vus.add(x);
+        voisins[x].forEach(v => {
+          if (!vus.has(v)) pile.push(v);
+        });
       }
     }
   }
+  return composantes;
+}
 
-  return composants;
+function compterGroupesOH(mol) {
+  const lignes = mol.split("\n");
+  const counts = lignes[3].trim().split(/\s+/);
+  const nbAtomes = parseInt(counts[0], 10);
+  const nbLiaisons = parseInt(counts[1], 10);
+
+  const symboles = {};
+  for (let i = 0; i < nbAtomes; i++) {
+    const p = lignes[4 + i].trim().split(/\s+/);
+    symboles[i + 1] = p[3];
+  }
+
+  let nbOH = 0;
+  const debut = 4 + nbAtomes;
+  for (let i = 0; i < nbLiaisons; i++) {
+    const p = lignes[debut + i].trim().split(/\s+/);
+    const a = parseInt(p[0], 10);
+    const b = parseInt(p[1], 10);
+    if (
+      (symboles[a] === "O" && symboles[b] === "H") ||
+      (symboles[a] === "H" && symboles[b] === "O")
+    ) {
+      nbOH++;
+    }
+  }
+  return nbOH;
 }
 </script>
 
