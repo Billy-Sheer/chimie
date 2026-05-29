@@ -18,65 +18,63 @@
       padding: 6px 12px;
       font-family: inherit;
     }
-    iframe {
-      border: 1px solid #ccc;
-    }
   </style>
+
+  <!-- ✅ ICI : TU LAISSES EXACTEMENT LES <script> KETCHER QUE TU AVAIS AVANT -->
+  <!-- ex : <script src="...cript> -->
 </head>
 
 <body>
 
 <h2 id="titre"></h2>
 
-<iframe
-  id="ketcherFrame"
-  src="https://unpkg.com/ketcher-standalone@2.8.0/dist/index.html"
-  width="600"
-  height="400">
-</iframe>
-
-<br>
+<!-- ✅ ICI : TON DIV KETCHER EXISTANT -->
+<div id="ketcher" style="width:600px; height:400px;"></div>
 
 <button onclick="valider()">Valider la structure</button>
 
 <div id="feedback"></div>
 
 <script>
-/* ===============================
-   PARAMÈTRE MOLÉCULE
-   =============================== */
+/* =====================================================
+   1. MOLÉCULE DEMANDÉE (NOUVEAU)
+   ===================================================== */
 const params = new URLSearchParams(window.location.search);
 const molecule = params.get("mol") || "HNO3";
 
 document.getElementById("titre").innerText =
   "Dessinez la structure de Lewis de " + molecule;
 
-/* ===============================
-   RÈGLES
-   =============================== */
+/* =====================================================
+   2. RÈGLES (NOUVEAU, MAIS SIMPLE)
+   ===================================================== */
 const regles = {
   HNO3: {
     atomes: { H:1, N:1, O:3 },
     central: "N"
+  },
+  NH3: {
+    atomes: { N:1, H:3 },
+    central: "N"
   }
+  // CO2, SO4, etc. plus tard
 };
 
-/* ===============================
-   VALIDATION
-   =============================== */
+/* =====================================================
+   3. VALIDATION (TRÈS PROCHE DE TON CODE ACTUEL)
+   ===================================================== */
 async function valider() {
   const feedback = document.getElementById("feedback");
   feedback.innerText = "";
 
-  const frame = document.getElementById("ketcherFrame");
-
-  if (!frame.contentWindow.ketcher) {
-    feedback.innerText = "Ketcher n’est pas encore prêt.";
+  const cible = regles[molecule];
+  if (!cible) {
+    feedback.innerText = "Molécule non configurée.";
     return;
   }
 
-  const mol = await frame.contentWindow.ketcher.getMolfile();
-  const cible = regles[molecule];
+  // ✅ LIGNE QUE TU UTILISAIS DÉJÀ
+  const mol = await ketcher.getMolfile();
 
   try {
     verifierAtomes(mol, cible.atomes);
@@ -87,9 +85,9 @@ async function valider() {
   }
 }
 
-/* ===============================
-   VALIDATEURS
-   =============================== */
+/* =====================================================
+   4. FONCTIONS RÉUTILISABLES
+   ===================================================== */
 function verifierAtomes(mol, atomes) {
   for (let el in atomes) {
     const nb = (mol.match(new RegExp("\\s" + el + "\\s", "g")) || []).length;
@@ -105,13 +103,15 @@ function verifierAtomeCentral(mol, symboleCentral) {
   const connexions = {};
   let index = 1;
 
-  for (let l of lignes) {
-    const p = l.trim().split(/\s+/);
+  for (let ligne of lignes) {
+    const p = ligne.trim().split(/\s+/);
 
+    // lignes atomes
     if (p.length >= 4 && isNaN(p[0])) {
       types[index++] = p[3];
     }
 
+    // lignes liaisons
     if (p.length >= 3 && !isNaN(p[0]) && !isNaN(p[1])) {
       connexions[p[0]] = (connexions[p[0]] || 0) + 1;
       connexions[p[1]] = (connexions[p[1]] || 0) + 1;
