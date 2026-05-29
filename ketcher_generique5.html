@@ -18,17 +18,24 @@
       padding: 6px 12px;
       font-family: inherit;
     }
+    iframe {
+      border: 1px solid #ccc;
+    }
   </style>
-
-  <!-- ✅ BON SCRIPT -->
-  <script src="https://unpkg.com/ketcher-standalone@2.8.0/dist/ketcher.min.js"></script>
 </head>
 
 <body>
 
 <h2 id="titre"></h2>
 
-<div id="ketcher" style="width:600px; height:400px;"></div>
+<iframe
+  id="ketcherFrame"
+  src="https://unpkg.com/ketcher-standalone@2.8.0/dist/index.html"
+  width="600"
+  height="400">
+</iframe>
+
+<br>
 
 <button onclick="valider()">Valider la structure</button>
 
@@ -55,25 +62,21 @@ const regles = {
 };
 
 /* ===============================
-   KETCHER ✅
-   =============================== */
-let ketcher;
-
-window.addEventListener("load", async () => {
-  ketcher = await window.ketcher.create(
-    document.getElementById("ketcher")
-  );
-});
-
-/* ===============================
    VALIDATION
    =============================== */
 async function valider() {
   const feedback = document.getElementById("feedback");
   feedback.innerText = "";
 
+  const frame = document.getElementById("ketcherFrame");
+
+  if (!frame.contentWindow.ketcher) {
+    feedback.innerText = "Ketcher n’est pas encore prêt.";
+    return;
+  }
+
+  const mol = await frame.contentWindow.ketcher.getMolfile();
   const cible = regles[molecule];
-  const mol = await ketcher.getMolfile();
 
   try {
     verifierAtomes(mol, cible.atomes);
@@ -85,7 +88,7 @@ async function valider() {
 }
 
 /* ===============================
-   FONCTIONS
+   VALIDATEURS
    =============================== */
 function verifierAtomes(mol, atomes) {
   for (let el in atomes) {
@@ -104,9 +107,11 @@ function verifierAtomeCentral(mol, symboleCentral) {
 
   for (let l of lignes) {
     const p = l.trim().split(/\s+/);
+
     if (p.length >= 4 && isNaN(p[0])) {
       types[index++] = p[3];
     }
+
     if (p.length >= 3 && !isNaN(p[0]) && !isNaN(p[1])) {
       connexions[p[0]] = (connexions[p[0]] || 0) + 1;
       connexions[p[1]] = (connexions[p[1]] || 0) + 1;
@@ -114,7 +119,7 @@ function verifierAtomeCentral(mol, symboleCentral) {
   }
 
   let centre = Object.keys(connexions)
-    .reduce((a,b)=> connexions[a]>connexions[b]?a:b);
+    .reduce((a,b)=> connexions[a] > connexions[b] ? a : b);
 
   if (types[centre] !== symboleCentral) {
     throw "❌ L’atome central est incorrect.";
