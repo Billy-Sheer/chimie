@@ -147,13 +147,25 @@ for (let i = 0; i < nbAtomes; i++) {
     }
 
     for (let el of atomesAutorises) {
-      const nbEl = atomesPresents.filter(x => x === el).length;
-      if (nbEl !== cible.atomes[el]) {
-        feedback.innerText =
-          "❌ Nombre incorrect d’atomes " + el + ".";
-        return;
-      }
-    }
+  const nbEl = atomesPresents.filter(x => x === el).length;
+  const nbAttendu = cible.atomes[el];
+
+  // 🔹 Cas particulier : hydrogènes implicites
+  if (el === "H" && nbEl < nbAttendu) {
+    feedback.innerText =
+      "❌ Les hydrogènes doivent être dessinés explicitement.\n" +
+      "Assure‑toi de tracer les liaisons avec H (ex. N–H).";
+    return;
+  }
+
+  // 🔹 Cas général
+  if (nbEl !== nbAttendu) {
+    feedback.innerText =
+      "❌ Nombre incorrect d’atomes " + el +
+      " (attendu : " + nbAttendu + ").";
+    return;
+  }
+}
 
     feedback.innerText =
       "✅ Structure plausible et raisonnement correct.";
