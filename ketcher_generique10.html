@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Diagramme de Lewis – Exercice formatif</title>
+
+  <style>
+    body {
+      font-family: Calibri, "Segoe UI", Arial, sans-serif;
+      font-size: 16px;
+    }
+
+    input, button {
+      font-family: inherit;
+      font-size: 16px;
+    }
+  </style>
+</head>
+
+<body>
+
+<h2 id="titre"></h2>
+<p id="consigne"></p>
+
+<!-- KETCHER AUTO-HÉBERGÉ -->
+<div id="ketcher-container">
+  <iframe
+    id="ketcherFrame"
+    src="ketcher/index.html"
+    width="600"
+    height="400"
+    style="border:1px solid #000;"
+  ></iframe>
+</div>
+
+<br><br>
+
+<p id="question-doublets"></p>
+
+<input type="number" id="doubletsCentral" min="0" max="6" style="width:60px;">
+
+<br><br>
+
+<button onclick="verifier()">Vérifier</button>
+
+<div id="feedback" style="margin-top:15px; font-weight:bold;"></div>
+
+<script>
+/* ===============================
+   PARAMÈTRE MOLÉCULE
+   =============================== */
+const params = new URLSearchParams(window.location.search);
+const molecule = params.get("mol") || "NH3";
+
+/* ===============================
+   RÈGLES
+   =============================== */
+const regles = {
+  NH3: {
+    nom: "NH₃",
+    atomes: { N:1, H:3 },
+    doubletsCentral: 1,
+    oxoacide: false,
+    consigne: "Dessinez la structure de Lewis la plus plausible pour NH₃.",
+    question: "Combien de doublets libres y a‑t‑il sur l’atome d’azote (N) ?"
+  },
+  HNO3: {
+    nom: "HNO₃",
+    atomes: { H:1, N:1, O:3 },
+    doubletsCentral: 0,
+    oxoacide: true,
+    consigne: "Dessinez la structure de Lewis la plus plausible pour HNO₃.",
+    question: "Combien de doublets libres y a‑t‑il sur l’atome d’azote (N) ?"
+  }
+};
+
+const cible = regles[molecule];
+document.getElementById("titre").innerText =
+  cible.nom + " – Diagramme de Lewis (formatif)";
+document.getElementById("consigne").innerText = cible.consigne;
+document.getElementById("question-doublets").innerText = cible.question;
+
+/* ===============================
+   FONCTION PRINCIPALE
+   =============================== */
+function verifier() {
+
+  const feedback = document.getElementById("feedback");
+
+  const doublets = parseInt(
+    document.getElementById("doubletsCentral").value, 10
+  );
+
+  if (isNaN(doublets)) {
+    feedback.innerText =
+      "❌ Indique le nombre de doublets libres sur l’atome central.";
+    return;
+  }
+
+  if (doublets !== cible.doubletsCentral) {
+    feedback.innerText =
+      "❌ Nombre de doublets incorrect.";
+    return;
+  }
+
+  const ketcher = document
+    .getElementById("ketcherFrame")
+    .contentWindow.ketcher;
+
+  ketcher.getMolfile().then(mol => {
+
+    /* ===== 0) PLUSIEURS MOLÉCULES ===== */
+    const nb = compterMolecules(mol);
+    if (nb > 1) {
+      feedback.innerText =
+        "❌ Le dessin contient plusieurs molécules non reliées.";
+      return;
+    }
+
+    /* ===== 1) ATOMES PRÉSENTS ===== */
+    const atomesPresents = (mol.match(/\s[A-Z][a-z]?\s/g) || [])
+      .map(x => x.trim());
+
+    const atomesAutorises = Object.keys(cible.atomes);
+
+    const interdits = atomesPresents.filter(
+      el => !atomesAutorises.includes(el)
+    );
+
+    if (interdits.length > 0) {
+      feedback.innerText =
+        "❌ Atome(s) non approprié(s) : " +
+        [...new Set(interdits)].join(", ");
+      return;
+    }
+
+    for (let el of atomesAutorises) {
+      const nbEl = atomesPresents.filter(x => x === el).length;
+      if (nbEl !== cible.atomes[el]) {
+        feedback.innerText =
+          "❌ Nombre incorrect d’atomes " + el + ".";
+        return;
+      }
+    }
+
+    feedback.innerText =
+      "✅ Structure plausible et raisonnement correct.";
+  });
+}
+
+/* ===============================
+   DÉTECTION DE PLUSIEURS MOLÉCULES (CORRIGÉE ✅)
+   =============================== */
+function compterMolecules(mol) {
+  const lignes = mol.split("\n");
+
+  // Ligne des comptes (ligne 4 du Molfile)
+  const counts = lignes[3].trim().split(/\s+/);
+  const nbAtomes = parseInt(counts[0], 10);
+  const nbLiaisons = parseInt(counts[1], 10);
+
+  const liaisons = {};
+  for (let i = 1; i <= nbAtomes; i++) {
+    liaisons[i] = [];
+  }
+
+  // Lignes des liaisons
+  const debutLiaisons = 4 + nbAtomes;
+  for (let i = 0; i < nbLiaisons; i++) {
+    const p = lignes[debutLiaisons + i].trim().split(/\s+/);
+    const a = parseInt(p[0], 10);
+    const b = parseInt(p[1], 10);
+    liaisons[a].push(b);
+    liaisons[b].push(a);
+  }
+
+  const visites = new Set();
+  let composants = 0;
+
+  for (let i = 1; i <= nbAtomes; i++) {
+    if (!visites.has(i)) {
+      composants++;
+      const pile = [i];
+      while (pile.length) {
+        const x = pile.pop();
+        if (visites.has(x)) continue;
+        visites.add(x);
+        for (let v of liaisons[x]) {
+          if (!visites.has(v)) pile.push(v);
+        }
+      }
+    }
+  }
+
+  return composants;
+}
+</script>
+
+</body>
+</html>
