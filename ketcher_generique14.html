@@ -43,15 +43,15 @@
 <div id="feedback" style="margin-top:15px; font-weight:bold;"></div>
 
 <script>
-/* ===============================
+/* =====================================================
    PARAMÈTRE MOLÉCULE
-   =============================== */
+   ===================================================== */
 const params = new URLSearchParams(window.location.search);
 const molecule = params.get("mol") || "HNO3";
 
-/* ===============================
+/* =====================================================
    RÈGLES
-   =============================== */
+   ===================================================== */
 const regles = {
   NH3: {
     nom: "NH₃",
@@ -75,12 +75,13 @@ document.getElementById("titre").innerText =
 document.getElementById("consigne").innerText = cible.consigne;
 document.getElementById("question-doublets").innerText = cible.question;
 
-/* ===============================
+/* =====================================================
    FONCTION PRINCIPALE
-   =============================== */
+   ===================================================== */
 function verifier() {
   const feedback = document.getElementById("feedback");
 
+  /* --- Doublets --- */
   const doublets = parseInt(
     document.getElementById("doubletsCentral").value, 10
   );
@@ -102,14 +103,14 @@ function verifier() {
 
   ketcher.getMolfile().then(mol => {
 
-    /* --- 1) Plusieurs molécules --- */
+    /* === 1) Plusieurs molécules === */
     if (compterMolecules(mol) > 1) {
       feedback.innerText =
         "❌ Le dessin contient plusieurs molécules non reliées.";
       return;
     }
 
-    /* --- 2) Lecture des atomes --- */
+    /* === 2) Lecture des atomes === */
     const lignes = mol.split("\n");
     const counts = lignes[3].trim().split(/\s+/);
     const nbAtomes = parseInt(counts[0], 10);
@@ -121,7 +122,6 @@ function verifier() {
     }
 
     const atomesAutorises = Object.keys(cible.atomes);
-
     const interdits = atomesPresents.filter(
       el => !atomesAutorises.includes(el)
     );
@@ -133,7 +133,7 @@ function verifier() {
       return;
     }
 
-    /* --- 3) Quantités d’atomes (H explicites) --- */
+    /* === 3) Quantités (H explicites) === */
     for (let el of atomesAutorises) {
       const nb = atomesPresents.filter(x => x === el).length;
       const attendu = cible.atomes[el];
@@ -153,12 +153,13 @@ function verifier() {
       }
     }
 
-    /* --- 4) Trappe spécifique HNO3 : exactement un OH --- */
+    /* === 4) Trappe spécifique HNO3 : OH valide === */
     if (molecule === "HNO3") {
-      const nbOH = compterGroupesOH(mol);
+      const nbOH = compterGroupesOH_HNO3(mol);
       if (nbOH !== 1) {
         feedback.innerText =
-          "❌ HNO₃ doit contenir un seul groupe OH.";
+          "❌ HNO₃ doit contenir un seul groupe OH " +
+          "lié par une liaison simple à l’azote.";
         return;
       }
     }
@@ -168,9 +169,9 @@ function verifier() {
   });
 }
 
-/* ===============================
+/* =====================================================
    OUTILS
-   =============================== */
+   ===================================================== */
 function compterMolecules(mol) {
   const lignes = mol.split("\n");
   const counts = lignes[3].trim().split(/\s+/);
@@ -209,7 +210,7 @@ function compterMolecules(mol) {
   return composantes;
 }
 
-function compterGroupesOH(mol) {
+function compterGroupesOH_HNO3(mol) {
   const lignes = mol.split("\n");
   const counts = lignes[3].trim().split(/\s+/);
   const nbAtomes = parseInt(counts[0], 10);
@@ -223,13 +224,19 @@ function compterGroupesOH(mol) {
 
   let nbOH = 0;
   const debut = 4 + nbAtomes;
+
   for (let i = 0; i < nbLiaisons; i++) {
     const p = lignes[debut + i].trim().split(/\s+/);
     const a = parseInt(p[0], 10);
     const b = parseInt(p[1], 10);
+    const type = parseInt(p[2], 10); // 1 = simple
+
     if (
-      (symboles[a] === "O" && symboles[b] === "H") ||
-      (symboles[a] === "H" && symboles[b] === "O")
+      type === 1 &&
+      (
+        (symboles[a] === "O" && symboles[b] === "H") ||
+        (symboles[a] === "H" && symboles[b] === "O")
+      )
     ) {
       nbOH++;
     }
