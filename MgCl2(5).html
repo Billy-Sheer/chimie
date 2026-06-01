@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>MgCl2 – Composé ionique</title>
+
+  <style>
+    body {
+      font-family: Calibri, "Segoe UI", Arial, sans-serif;
+      font-size: 16px;
+    }
+    button {
+      font-family: inherit;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+    #feedback {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    img {
+      margin-top: 10px;
+      max-width: 300px;
+    }
+  </style>
+</head>
+
+<body>
+
+<h2>Representation ionique du MgCl2</h2>
+
+<p>
+Representez graphiquement les ions presents dans le compose ionique
+<strong>MgCl2</strong>.
+</p>
+
+<ul>
+  <li>Les ions doivent etre <strong>separes</strong>.</li>
+  <li>
+    Utilisez le bouton <strong>PT</strong> pour choisir les elements
+    (dans le menu vertical droit).
+  </li>
+  <li>Ajoutez les <strong>charges</strong> aux ions.</li>
+</ul>
+
+<!-- KETCHER -->
+<iframe
+  id="ketcherFrame"
+  src="ketcher/index.html"
+  width="800"
+  height="500"
+  style="border:1px solid #000;">
+</iframe>
+
+<br>
+
+<button onclick="verifier()">Verifier</button>
+
+<div id="feedback"></div>
+
+<script>
+function verifier() {
+
+  const feedback = document.getElementById("feedback");
+  feedback.innerHTML = "";
+
+  const ketcher =
+    document.getElementById("ketcherFrame").contentWindow.ketcher;
+
+  ketcher.getMolfile().then(mol => {
+
+    const lignes = mol.split("\n");
+
+    // Ligne des comptes
+    const counts = lignes[3].trim().split(/\s+/);
+    const nbAtomes = parseInt(counts[0], 10);
+    const nbLiaisons = parseInt(counts[1], 10);
+
+    // === 1) Atomes presents ===
+    const symboles = [];
+    const charges = [];
+
+    for (let i = 0; i < nbAtomes; i++) {
+      const p = lignes[4 + i].trim().split(/\s+/);
+      symboles.push(p[3]);
+      charges.push(parseInt(p[5], 10)); // champ charge
+    }
+
+    // Atomes autorises
+    if (symboles.some(s => s !== "Mg" && s !== "Cl")) {
+      feedback.innerText =
+        "Ce compose ionique ne contient que des ions Mg et Cl.";
+      return;
+    }
+
+    // === 2) Quantites ===
+    const nbMg = symboles.filter(s => s === "Mg").length;
+    const nbCl = symboles.filter(s => s === "Cl").length;
+
+    if (nbMg !== 1 || nbCl !== 2) {
+      feedback.innerHTML =
+        "Vous avez determine qu'il y a 1 ion Mg<sup>2+</sup> et " +
+        "2 ions Cl<sup>-</sup>.<br>" +
+        "Votre representation doit en tenir compte.";
+      return;
+    }
+
+    // === 3) Charges ===
+    let chargesCorrectes = true;
+
+    symboles.forEach((s, i) => {
+      if (s === "Mg" && charges[i] !== 2) chargesCorrectes = false;
+      if (s === "Cl" && charges[i] !== -1) chargesCorrectes = false;
+    });
+
+    if (!chargesCorrectes) {
+      feedback.innerHTML =
+        "Ajoutez des charges aux atomes a l'aide de ces boutons " +
+        "dans le menu de gauche.<br>" +
+        "<img src='images/Img_boutons_A+_A-_Ketcher.jpg' alt='Bout}
+
+    // === 4) Liaisons ===
+    if (nbLiaisons > 0) {
+      feedback.innerText =
+        "Les ions d'un compose ionique ne sont pas lies entre eux.";
+      return;
+    }
+
+    // ✅ Succes
+    feedback.innerHTML =
+      "Representation correcte des ions Mg<sup>2+</sup> et Cl<sup>-</sup> " +
+      "separes dans le MgCl<sub>2</sub>.";
+  });
+}
+</script>
+
+</body>
+</html>
