@@ -27,17 +27,17 @@
 
 <body>
 
-<h2>Representation ionique du MgCl2</h2>
+<h2>Représentation ionique du MgCl<sub>2</sub></h2>
 
 <p>
-Representez graphiquement les ions presents dans le compose ionique
-<strong>MgCl2</strong>.
+Représentez graphiquement les ions présents dans le composé ionique
+<strong>MgCl<sub>2</sub></strong>.
 </p>
 
 <ul>
-  <li>Les ions doivent etre <strong>separes</strong>.</li>
+  <li>Les ions doivent être <strong>séparés</strong>.</li>
   <li>
-    Utilisez le bouton <strong>PT</strong> pour choisir les elements
+    Utilisez le bouton <strong>PT</strong> pour choisir les éléments
     (dans le menu vertical droit).
   </li>
   <li>Ajoutez les <strong>charges</strong> aux ions.</li>
@@ -54,17 +54,28 @@ Representez graphiquement les ions presents dans le compose ionique
 
 <br>
 
-<button onclick="verifier()">Verifier</button>
+<button onclick="verifier()">Vérifier</button>
 
 <div id="feedback"></div>
+
 <script>
+function chargeReelle(code) {
+  if (code === 1) return 3;
+  if (code === 2) return 2;
+  if (code === 3) return 1;
+  if (code === 5) return -1;
+  if (code === 6) return -2;
+  if (code === 7) return -3;
+  return 0;
+}
+
 function verifier() {
 
   var feedback = document.getElementById("feedback");
   feedback.innerHTML = "";
 
-  var frame = document.getElementById("ketcherFrame");
-  var ketcher = frame.contentWindow.ketcher;
+  var ketcher =
+    document.getElementById("ketcherFrame").contentWindow.ketcher;
 
   ketcher.getMolfile().then(function(mol) {
 
@@ -75,24 +86,24 @@ function verifier() {
     var nbLiaisons = parseInt(counts[1], 10);
 
     var symboles = [];
-    var charges = [];
+    var codesCharge = [];
 
     for (var i = 0; i < nbAtomes; i++) {
       var p = lignes[4 + i].trim().split(/\s+/);
       symboles.push(p[3]);
-      charges.push(parseInt(p[5], 10));
+      codesCharge.push(parseInt(p[5], 10));
     }
 
-    // 1) Atomes autorises
+    /* 1) Atomes autorisés */
     for (i = 0; i < symboles.length; i++) {
       if (symboles[i] !== "Mg" && symboles[i] !== "Cl") {
         feedback.innerText =
-          "Ce compose ionique ne contient que des ions Mg et Cl.";
+          "Ce composé ionique ne contient que des ions Mg et Cl.";
         return;
       }
     }
 
-    // 2) Quantites
+    /* 2) Quantités */
     var nbMg = 0;
     var nbCl = 0;
 
@@ -103,43 +114,46 @@ function verifier() {
 
     if (nbMg !== 1 || nbCl !== 2) {
       feedback.innerHTML =
-        "Vous avez determine qu'il y a 1 ion Mg<sup>2+</sup> et " +
+        "Vous avez déterminé qu’il y a 1 ion Mg<sup>2+</sup> et " +
         "2 ions Cl<sup>-</sup>.<br>" +
-        "Votre representation doit en tenir compte.";
+        "Votre représentation doit en tenir compte.";
       return;
     }
 
-    // 3) Charges
+    /* 3) Charges */
     for (i = 0; i < symboles.length; i++) {
-      if (symboles[i] === "Mg" && charges[i] !== 2) {
+      var charge = chargeReelle(codesCharge[i]);
+
+      if (symboles[i] === "Mg" && charge !== 2) {
         feedback.innerHTML =
-          "Ajoutez des charges aux atomes a l'aide de ces boutons " +
+          "Ajoutez des charges aux atomes à l’aide de ces boutons " +
           "dans le menu de gauche.<br>" +
-          "<img src='images/Img_bA-_Ketcher.jpg";
+          "<img src='images/Img_boutons_chargespg";
         return;
       }
-      if (symboles[i] === "Cl" && charges[i] !== -1) {
+
+      if (symboles[i] === "Cl" && charge !== -1) {
         feedback.innerHTML =
-          "Ajoutez des charges aux atomes a l'aide de ces boutons " +
+          "Ajoutez des charges aux atomes à l’aide de ces boutons " +
           "dans le menu de gauche.<br>" +
-          "images/Img_boutons_A+_A-_Ketcher.jpg";
-        return;
+          "<img src='images/Img_boutons_charges_Ketcher.jpg return;
       }
     }
 
-    // 4) Liaisons
+    /* 4) Liaisons */
     if (nbLiaisons > 0) {
       feedback.innerText =
-        "Les ions d'un compose ionique ne sont pas lies entre eux.";
+        "Les ions d’un composé ionique ne sont pas liés entre eux.";
       return;
     }
 
-    // SUCCES
+    /* SUCCÈS */
     feedback.innerHTML =
-      "Representation correcte des ions Mg<sup>2+</sup> et Cl<sup>-</sup> " +
-      "separes dans le MgCl<sub>2</sub>.";
+      "Représentation correcte des ions Mg<sup>2+</sup> et Cl<sup>-</sup> " +
+      "séparés dans le MgCl<sub>2</sub>.";
   });
 }
 </script>
+
 </body>
 </html>
