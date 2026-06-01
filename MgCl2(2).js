@@ -18,7 +18,6 @@
         }
       }
     }
-  
     return charges;
   }
   
@@ -80,27 +79,45 @@
       }
   
       /* ==================================================
-         3) Charges : Mg2+ et Cl-
+         3) Charges
          ================================================== */
       var charges = lireChargesMolfile(lignes);
   
+      var chargePresente = false;
       for (i = 0; i < symboles.length; i++) {
-        var atomIndex = i + 1; // Molfile commence à 1
+        var atomIndex = i + 1;
+        if (charges[atomIndex] !== undefined && charges[atomIndex] !== 0) {
+          chargePresente = true;
+        }
+      }
+  
+      /* --- 3a) Aucune charge --- */
+      if (!chargePresente) {
+        feedback.innerHTML =
+          "Ajoutez des charges aux atomes a l'aide de ces boutons " +
+          "dans le menu de gauche.<br>" +
+          "<img src='images/Img_boutons_charges_Ketcher.jpg'>";
+        return;
+      }
+  
+      /* --- 3b) Charges presentes mais incorrectes --- */
+      for (i = 0; i < symboles.length; i++) {
+        var atomIndex = i + 1;
         var charge = charges[atomIndex] || 0;
   
         if (symboles[i] === "Mg" && charge !== 2) {
-          feedback.innerHTML =
-            "Ajoutez des charges aux atomes a l'aide de ces boutons " +
-            "dans le menu de gauche.<br>" +
-            "<img src='images/Img_boutons_charges_Ketcher.jpg'>";
+          feedback.innerText =
+            "Les charges ont ete ajoutees, mais elles ne correspondent pas " +
+            "aux ions du compose MgCl2. Rappelez-vous que Mg forme Mg2+ " +
+            "et Cl forme Cl-.";
           return;
         }
   
         if (symboles[i] === "Cl" && charge !== -1) {
-          feedback.innerHTML =
-            "Ajoutez des charges aux atomes a l'aide de ces boutons " +
-            "dans le menu de gauche.<br>" +
-            "<img src='images/Img_boutons_charges_Ketcher.jpg'>";
+          feedback.innerText =
+            "Les charges ont ete ajoutees, mais elles ne correspondent pas " +
+            "aux ions du compose MgCl2. Rappelez-vous que Mg forme Mg2+ " +
+            "et Cl forme Cl-.";
           return;
         }
       }
@@ -115,11 +132,10 @@
       }
   
       /* ==================================================
-         SUCCÈS
+         SUCCES
          ================================================== */
       feedback.innerHTML =
         "Representation correcte des ions Mg<sup>2+</sup> et Cl<sup>-</sup> " +
         "separes dans le MgCl<sub>2</sub>.";
     });
   }
-  
