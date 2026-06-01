@@ -59,6 +59,7 @@ Représentez graphiquement les ions présents dans le composé ionique
 <div id="feedback"></div>
 
 <script>
+// Conversion du code de charge Molfile en charge réelle
 function chargeReelle(code) {
   if (code === 1) return 3;
   if (code === 2) return 2;
@@ -114,7 +115,7 @@ function verifier() {
 
     if (nbMg !== 1 || nbCl !== 2) {
       feedback.innerHTML =
-        "Vous avez déterminé qu’il y a 1 ion Mg<sup>2+</sup> et " +
+        "Vous avez déterminé qu'il y a 1 ion Mg<sup>2+</sup> et " +
         "2 ions Cl<sup>-</sup>.<br>" +
         "Votre représentation doit en tenir compte.";
       return;
@@ -126,24 +127,23 @@ function verifier() {
 
       if (symboles[i] === "Mg" && charge !== 2) {
         feedback.innerHTML =
-          "Ajoutez des charges aux atomes à l’aide de ces boutons " +
+          "Ajoutez des charges aux atomes a l'aide de ces boutons " +
           "dans le menu de gauche.<br>" +
-          "<img src='images/Img_boutons_chargespg";
-        return;
+          "<img src='images/Img_boutons_charges_Ketcher.jpg' alt=';
       }
 
       if (symboles[i] === "Cl" && charge !== -1) {
         feedback.innerHTML =
-          "Ajoutez des charges aux atomes à l’aide de ces boutons " +
+          "Ajoutez des charges aux atomes a l'aide de ces boutons " +
           "dans le menu de gauche.<br>" +
-          "<img src='images/Img_boutons_charges_Ketcher.jpg return;
+          "<img src='images/Img_boutons_charges_Ketcher.jpg' altrn;
       }
     }
 
     /* 4) Liaisons */
     if (nbLiaisons > 0) {
       feedback.innerText =
-        "Les ions d’un composé ionique ne sont pas liés entre eux.";
+        "Les ions d'un composé ionique ne sont pas liés entre eux.";
       return;
     }
 
