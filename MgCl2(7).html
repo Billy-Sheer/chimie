@@ -60,19 +60,19 @@ Representez graphiquement les ions presents dans le compose ionique
 <script>
 function verifier() {
 
-  const feedback = document.getElementById("feedback");
+  var feedback = document.getElementById("feedback");
   feedback.innerHTML = "";
 
-  const ketcher =
-    document.getElementById("ketcherFrame").contentWindow.ketcher;
+  var frame = document.getElementById("ketcherFrame");
+  var ketcher = frame.contentWindow.ketcher;
 
   ketcher.getMolfile().then(function(mol) {
 
-    const lignes = mol.split("\n");
+    var lignes = mol.split("\n");
 
-    const counts = lignes[3].trim().split(/\s+/);
-    const nbAtomes = parseInt(counts[0], 10);
-    const nbLiaisons = parseInt(counts[1], 10);
+    var counts = lignes[3].trim().split(/\s+/);
+    var nbAtomes = parseInt(counts[0], 10);
+    var nbLiaisons = parseInt(counts[1], 10);
 
     var symboles = [];
     var charges = [];
@@ -115,13 +115,14 @@ function verifier() {
         feedback.innerHTML =
           "Ajoutez des charges aux atomes a l'aide de ces boutons " +
           "dans le menu de gauche.<br>" +
-          "<img src='images/Img_boutons_A+_A-_Ketcher     return;
+          "<img src='images/Img_bA-_Ketcher.jpg";
+        return;
       }
       if (symboles[i] === "Cl" && charges[i] !== -1) {
         feedback.innerHTML =
           "Ajoutez des charges aux atomes a l'aide de ces boutons " +
           "dans le menu de gauche.<br>" +
-          "<img src='images/Img_boutons_A+_A-_g";
+          "images/Img_boutons_A+_A-_Ketcher.jpg";
         return;
       }
     }
