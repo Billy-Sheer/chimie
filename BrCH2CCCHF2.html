@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>BrCH2CCCHF2</title>
+
+  <style>
+    body {
+      font-family: Calibri, "Segoe UI", Arial, sans-serif;
+      font-size: 16px;
+    }
+    button {
+      font-family: inherit;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+    #feedback {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<h2>Molécule organique</h2>
+
+<p>
+Dessinez la molécule :
+<strong>BrCH<sub>2</sub>CCCHF<sub>2</sub></strong>
+</p>
+
+<ul>
+  <li>Respectez l’écriture <strong>semi‑développée</strong>.</li>
+  <li>Ne pas afficher les hydrogènes, sauf si une liaison <strong>O–H</strong> est demandée (ce n’est pas le cas ici).</li>
+  <li>Dessinez d’abord la <strong>structure de Lewis sur une feuille</strong>, puis reproduisez‑la en structure stylisée.</li>
+  <li>Attention au nombre d’atomes et à la position des liaisons multiples.</li>
+  <li>Les <strong>halogènes</strong> (F) et l’<strong>hydrogène</strong> font toujours un seul lien.</li>
+</ul>
+
+<!-- KETCHER -->
+<iframe
+  id="ketcherFrame"
+  src="ketcher/index.html"
+  width="800"
+  height="500"
+  style="border:1px solid #000;">
+</iframe>
+
+<br>
+
+<button onclick="verifier()">Vérifier</button>
+
+<div id="feedback"></div>
+
+<!-- SCRIPT DE VALIDATION -->
+<script src="BrCH2CCCHF2.js"></script>
+
+</body>
+</html>
