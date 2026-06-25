@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>HSiN – Diagramme de Lewis</title>
+
+  <style>
+    body {
+      font-family: Calibri, "Segoe UI", Arial, sans-serif;
+      font-size: 16px;
+    }
+
+    h3 {
+      margin-top: 20px;
+    }
+
+    button {
+      font-family: inherit;
+      font-size: 16px;
+    }
+
+    #feedback {
+      font-weight: bold;
+      color: #4B0082; /* violet foncé */
+    }
+
+    #illustration {
+      margin-top: 15px;
+    }
+
+    #illustration img {
+      max-width: 400px;
+    }
+  </style>
+</head>
+
+<body>
+
+<h2>Diagramme de Lewis de HSiN</h2>
+
+<p>
+<strong>Avant d’utiliser Ketcher, dessinez la structure de Lewis sur une feuille.</strong><br>
+Ketcher sert à représenter une structure déjà réfléchie.
+</p>
+
+<h3>Méthode de construction d’un diagramme de Lewis</h3>
+
+<ol>
+  <li>Calculer le nombre total d’électrons de valence.</li>
+
+  <li>Dessiner la structure squelettique :
+    <ul>
+      <li>Les H sont toujours périphériques.</li>
+      <li>L’électronégativité de l’atome central est inférieure à celle des atomes périphériques.</li>
+      <li>Oxacides : les H sont liés à O.</li>
+      <li>Structure linéaire (pas de cycle).</li>
+      <li><strong>Les liaisons avec l’hydrogène doivent être explicitement représentées.</strong></li>
+    </ul>
+  </li>
+
+  <li>Compléter l’octet des atomes périphériques.</li>
+
+  <li>Assigner les électrons de valence restants à l’atome central.</li>
+
+  <li>
+    Si l’atome central n’atteint pas l’octet, former des liaisons multiples.
+  </li>
+</ol>
+
+<h3>Important — hydrogènes dans Ketcher</h3>
+
+<p>
+La correction automatique tient compte uniquement des atomes
+<strong>reliés par des liaisons</strong>.
+Un hydrogène non relié par une liaison est
+<strong>ignoré par la correction</strong>, même s’il est visible.
+</p>
+
+<img src="H_implicite2.jpg"
+     alt="Hydrogènes ignorés ou reconnus par la correction">
+
+<br><br>
+
+<img src="Add_Atoms.jpg"
+     alt="Ajouter un atome à l’aide du tableau périodique (PT)">
+
+<h3>Questions de raisonnement</h3>
+
+<p>
+<strong>Nombre total d’électrons de valence du HSiN :</strong>
+<input type="number" id="valenceElectrons">
+</p>
+
+<p>
+<strong>Nombre de doublets libres sur l’atome central :</strong>
+<input type="number" id="doubletsCentraux">
+</p>
+
+<hr>
+
+<!-- KETCHER -->
+<iframe id="ketcherFrame"
+        src="../ketcher/index.html"
+        width="800"
+        height="600">
+</iframe>
+
+<br><br>
+
+<div style="display:flex; align-items:center; gap:15px;">
+  <button type="button" onclick="verifierHSiN()">Vérifier</button>
+  <div id="feedback"></div>
+</div>
+
+<!-- Illustration affichée uniquement après succès -->
+<div id="illustration" style="display:none;">
+  <h3>Structure de Lewis attendue</h3>
+  <p>
+    À l’examen, la structure devra être dessinée sur une feuille et tous les
+    doublets libres devront être explicitement représentés, comme dans
+    l’illustration ci‑dessous.
+  </p>
+  <img src="HSiN.jpg">
+</div>
+
+<script src="HSiN.js"></script>
+
+</body>
+</html>

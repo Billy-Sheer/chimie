@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>NHBr₂ – Entraînement Ketcher</title>
+
+  <style>
+    body {
+      font-family: Calibri, "Segoe UI", Arial, sans-serif;
+      font-size: 16px;
+    }
+
+    h3 {
+      margin-top: 20px;
+    }
+
+    button {
+      font-family: inherit;
+      font-size: 16px;
+    }
+
+    #feedback {
+      font-weight: bold;
+      color: #4B0082;
+    }
+  </style>
+</head>
+
+<body>
+
+<h2>Entraînement — représentation dans Ketcher du NHBr₂</h2>
+
+<p>
+<strong>Après avoir visionné la capsule vidéo, réalisez la structure de Lewis de NHBr₂ dans Ketcher.</strong><br>
+Cet exercice sert à vérifier que vous maîtrisez les gestes techniques dans Ketcher.
+</p>
+
+
+
+<h3>Rappel important — hydrogènes dans Ketcher</h3>
+
+<p>
+La correction automatique tient compte uniquement des atomes
+<strong>reliés par des liaisons</strong>.<br>
+Un hydrogène non relié par une liaison est
+<strong>ignoré par la correction</strong>, même s’il est visible.
+</p>
+
+<img src="H_implicite2.jpg"
+     alt="Hydrogènes visibles mais ignorés s’ils ne sont pas reliés par une liaison">
+
+<h3>Questions de raisonnement</h3>
+
+<p>
+<strong>Nombre total d’électrons de valence du NHBr₂ :</strong>
+<input type="number" id="valenceElectrons">
+</p>
+
+<p>
+<strong>Nombre de doublets libres sur l’atome central :</strong>
+<input type="number" id="doubletsCentraux">
+</p>
+
+<hr>
+
+<!-- KETCHER -->
+<iframe
+  id="ketcherFrame"
+  src="../ketcher/index.html"
+  width="800"
+  height="500">
+</iframe>
+
+<br><br>
+
+<div style="display:flex; align-items:center; gap:15px;">
+  <button type="button" onclick="verifierNHBr2()">Vérifier</button>
+  <div id="feedback"></div>
+</div>
+
+<script src="NHBr2.js"></script>
+
+</body>
+</html>

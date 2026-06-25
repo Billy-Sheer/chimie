@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>BrO₂⁻ – Diagramme de Lewis</title>
+
+  <style>
+    body {
+      font-family: Calibri, "Segoe UI", Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.4;
+    }
+
+    h2, h3 {
+      margin-top: 20px;
+    }
+
+    input {
+      font-size: 16px;
+    }
+
+    button {
+      font-family: inherit;
+      font-size: 16px;
+      padding: 4px 10px;
+    }
+
+    #feedback {
+      font-weight: bold;
+      color: #4B0082;
+    }
+
+    #illustration {
+      display: none;
+      margin-top: 25px;
+    }
+
+    #illustration img {
+      max-width: 600px;
+      border: 1px solid #888;
+    }
+  </style>
+</head>
+
+<body>
+
+<h2>Diagramme de Lewis de BrO₂<sup>−</sup></h2>
+
+<p>
+  <strong>Avant d’utiliser Ketcher, dessinez la structure de Lewis sur une feuille.</strong><br>
+  Ketcher sert uniquement à représenter une structure déjà réfléchie.
+</p>
+
+<h3>Méthode de construction d’un diagramme de Lewis</h3>
+
+<ol>
+ <li>Calculer le nombre total d’électrons de valence.</li>
+
+  <li>Dessiner la structure squelettique :
+    <ul>
+      <li>Les H sont toujours périphériques.</li>
+      <li>L’électronégativité de l’atome central est inférieure à celle des atomes périphériques.</li>
+      <li>Oxacides : les H sont liés à O.</li>
+      <li><strong>La structure est compacte (en étoile, pas linéaire, pas de cycle).</strong></li>
+      <li><strong>Les liaisons avec l’hydrogène doivent être explicitement représentées.</strong></li>
+    </ul>
+  </li>
+
+  <li>Compléter l’octet des atomes périphériques.</li>
+  <li>Assigner les électrons de valence restants à l’atome central.</li>
+  <li>Si l’atome central n’atteint pas l’octet, former des liaisons multiples.</li>
+  <li>
+    Quand plusieurs représentations sont possibles, retenir la structure la plus plausible
+    à l’aide des charges formelles et de l’électronégativité.
+  </li>
+</ol>
+
+<h3>Questions de raisonnement</h3>
+
+<p>
+  <strong>Nombre total d’électrons de valence du BrO₂<sup>−</sup> :</strong>
+  <input type="number" id="valenceElectrons">
+</p>
+
+<p>
+  <strong>Nombre de doublets libres sur l’atome central :</strong>
+  <input type="number" id="doubletsCentraux">
+</p>
+
+<hr>
+
+<!-- KETCHER -->
+<iframe
+  id="ketcherFrame"
+  src="../ketcher/index.html"
+  width="800"
+  height="600"
+  style="border:1px solid #aaa;">
+</iframe>
+
+<br><br>
+
+<div style="display:flex; align-items:center; gap:15px;">
+  <button type="button" onclick="verifierBrO2()">Vérifier</button>
+  <div id="feedback"></div>
+</div>
+
+<!-- ILLUSTRATION (affichée uniquement après succès) -->
+<div id="illustration">
+  <h3>Structure de Lewis attendue</h3>
+  <p>
+    À l’examen, la structure devra être dessinée sur une feuille et tous les
+    doublets libres devront être explicitement représentés, comme dans
+    l’illustration ci‑dessous.
+  </p>
+  <img src="BrO2.jpg" alt="Structure de Lewis complète de BrO₂⁻">
+</div>
+
+<script src="BrO2.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>BrCl₂⁻ – Diagramme de Lewis</title>
+
+  <style>
+    body {
+      font-family: Calibri, "Segoe UI", Arial, sans-serif;
+      font-size: 16px;
+    }
+
+    h3 {
+      margin-top: 20px;
+    }
+
+    button {
+      font-family: inherit;
+      font-size: 16px;
+    }
+
+    #feedback {
+      font-weight: bold;
+      color: #4B0082; /* violet foncé */
+      margin-top: 10px;
+    }
+
+    #illustration {
+      margin-top: 15px;
+    }
+
+    #illustration img {
+      max-width: 400px;
+    }
+  </style>
+</head>
+
+<body>
+
+<h2>Diagramme de Lewis de BrCl₂⁻</h2>
+
+<p>
+<strong>Avant d’utiliser Ketcher, dessinez la structure de Lewis sur une feuille.</strong><br>
+Ketcher sert à représenter une structure déjà réfléchie.
+</p>
+
+<h3>Méthode de construction d’un diagramme de Lewis</h3>
+
+<ol>
+   <li>Calculer le nombre total d’électrons de valence.</li>
+
+  <li>Dessiner la structure squelettique :
+    <ul>
+      <li>Les H sont toujours périphériques.</li>
+      <li>L’électronégativité de l’atome central est inférieure à celle des atomes périphériques.</li>
+      <li>Oxacides : les H sont liés à O.</li>
+      <li>La structure est compacte (en étoile, pas linéaire, pas de cycle)</li>
+      <li><strong>Les liaisons avec l’hydrogène doivent être explicitement représentées.</strong></li>
+    </ul>
+  </li>
+
+  <li>Compléter l’octet des atomes périphériques.</li>
+  <li>Assigner les électrons de valence restants à l’atome central.</li>
+  <li>Si l’atome central n’atteint pas l’octet, former des liaisons multiples.</li>
+  <li>
+    Quand plusieurs représentations sont possibles, retenir la structure la plus plausible
+    à l’aide des charges formelles et de l’électronégativité.
+  </li>
+</ol>
+
+<h3>Questions de raisonnement</h3>
+
+<p>
+<strong>Nombre total d’électrons de valence du BrCl₂⁻ :</strong>
+<input type="number" id="valenceElectrons">
+</p>
+
+<p>
+<strong>Nombre de doublets libres sur l’atome central :</strong>
+<input type="number" id="doubletsCentraux">
+</p>
+
+<hr>
+
+<!-- KETCHER -->
+<iframe
+  id="ketcherFrame"
+  src="../ketcher/index.html"
+  width="800"
+  height="500"
+  style="border:1px solid #ccc;">
+</iframe>
+
+<br><br>
+
+
+<div style="display:flex; align-items:center; gap:15px;">
+  <button type="button" onclick="verifier()">Vérifier</button>
+  <div id="feedback"></div>
+</div>
+
+
+<div id="feedback"></div>
+
+<!-- Illustration affichée uniquement si la réponse est acceptée -->
+<div id="illustration" style="display:none;">
+  <p><em>La position des 3 doublets au centre peut ressembler à ça.</em></p>
+  <img src="BrCl2.jpg"
+       alt="Disposition possible des trois doublets libres autour de l’atome central dans BrCl₂⁻">
+</div>
+
+<script src="BrCl2.js"></script>
+
+</body>
+</html>
