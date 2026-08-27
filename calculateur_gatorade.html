@@ -1,0 +1,172 @@
+<style>
+.gatorade-calculateur{
+    font-family: Calibri, Arial, sans-serif;
+    max-width: 900px;
+}
+
+.gatorade-calculateur table{
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.gatorade-calculateur th,
+.gatorade-calculateur td{
+    border: 1px solid #000;
+    padding: 6px;
+    text-align: center;
+}
+
+.gatorade-calculateur th{
+    background: #d9d9d9;
+    font-weight: bold;
+}
+
+.gatorade-calculateur .input{
+    background: #ffd966;
+}
+
+.gatorade-calculateur .resultat{
+    background: #f2f2f2;
+    font-weight: bold;
+}
+
+.gatorade-calculateur .noir{
+    background: #000000;
+}
+
+.gatorade-calculateur input{
+    border: none;
+    background: transparent;
+    text-align: center;
+    font-family: Calibri, Arial, sans-serif;
+    font-size: 11pt;
+}
+
+.gatorade-calculateur .masse{
+    width: 80px;
+    background: #ffd966;
+    margin-left: 8px;
+}
+
+.gatorade-calculateur .volume{
+    width: 90%;
+}
+</style>
+
+<div class="gatorade-calculateur">
+
+<p>
+<label for="masse"><b>Masse de Gatorade (g) :</b></label>
+<input class="masse"
+       type="number"
+       id="masse"
+       step="0.01"
+       oninput="calculer()">
+</p>
+
+<table>
+
+<tr>
+    <th>Solution</th>
+    <th>Volume de solution mère prélevé<br>(mL)</th>
+    <th>Volume total de la solution fille<br>(mL)</th>
+    <th>Concentration<br>(g de sucre/L)</th>
+</tr>
+
+<tr>
+    <td>Eau distillée (blanc)</td>
+    <td class="noir"></td>
+    <td class="noir"></td>
+    <td class="resultat">0,000</td>
+</tr>
+
+<tr>
+    <td>Fille #1</td>
+    <td class="input">
+        <input class="volume"
+               type="number"
+               id="v1"
+               oninput="calculer()">
+    </td>
+    <td>25</td>
+    <td class="resultat" id="c1">0,000</td>
+</tr>
+
+<tr>
+    <td>Fille #2</td>
+    <td class="input">
+        <input class="volume"
+               type="number"
+               id="v2"
+               oninput="calculer()">
+    </td>
+    <td>25</td>
+    <td class="resultat" id="c2">0,000</td>
+</tr>
+
+<tr>
+    <td>Fille #3</td>
+    <td class="input">
+        <input class="volume"
+               type="number"
+               id="v3"
+               oninput="calculer()">
+    </td>
+    <td>25</td>
+    <td class="resultat" id="c3">0,000</td>
+</tr>
+
+<tr>
+    <td><b>Mère</b></td>
+    <td class="noir"></td>
+    <td class="noir"></td>
+    <td class="resultat" id="cmere">0,000</td>
+</tr>
+
+</table>
+
+<p style="margin-top:10px;">
+<i>Inscrire les concentrations dans votre cahier de laboratoire.</i>
+</p>
+
+</div>
+
+<script>
+
+function formatQC(nombre){
+    return nombre.toFixed(3).replace(".", ",");
+}
+
+function calculer(){
+
+    let masse = parseFloat(document.getElementById("masse").value);
+
+    let cellules = ["cmere","c1","c2","c3"];
+
+    if(isNaN(masse)){
+        cellules.forEach(function(cellule){
+            document.getElementById(cellule).innerHTML = "0,000";
+        });
+        return;
+    }
+
+    let mere = masse / 0.1 * 22 / 24;
+
+    document.getElementById("cmere").innerHTML =
+        formatQC(mere);
+
+    let v1 = parseFloat(document.getElementById("v1").value);
+    let v2 = parseFloat(document.getElementById("v2").value);
+    let v3 = parseFloat(document.getElementById("v3").value);
+
+    document.getElementById("c1").innerHTML =
+        isNaN(v1) ? "0,000" : formatQC(mere * v1 / 25);
+
+    document.getElementById("c2").innerHTML =
+        isNaN(v2) ? "0,000" : formatQC(mere * v2 / 25);
+
+    document.getElementById("c3").innerHTML =
+        isNaN(v3) ? "0,000" : formatQC(mere * v3 / 25);
+}
+
+</script>
