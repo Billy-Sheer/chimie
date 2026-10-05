@@ -21,7 +21,7 @@ function verifierH2SeO2() {
 
   if (document.getElementById("doubletsCentraux").value != 2) {
     feedback.innerHTML =
-      "Le nombre de doublets libres sur l’atome central (Se) n’est pas correct.";
+      "Le nombre de doublets libres sur l’atome central (Se) n’est pas correct. H₂SeO₂ est un oxacide";
     return;
   }
 
